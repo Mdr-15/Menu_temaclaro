@@ -14,7 +14,7 @@
         
         /* COLUMNA IZQUIERDA: Categorías y Productos */
         .catalog-section { flex: 1; display: flex; flex-direction: column; gap: 25px; }
-        .category-title { font-size: 18px; color: #f59e0b; border-bottom: 2px solid #1e293b; padding-bottom: 8px; margin: 0; font-weight: 800; text-transform: uppercase; }
+        .category-title { font-size: 18px; color: #f59e0b; border-bottom: 2px solid #1e293b; padding-bottom: 8px; margin: 20px 0 10px 0; font-weight: 800; text-transform: uppercase; }
         .products-grid { display: flex; flex-direction: column; gap: 12px; }
         
         /* Tarjeta de Producto */
@@ -26,7 +26,6 @@
         /* Selectores internos con Grid para Combos */
         .sauce-selector { background: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
         .sauce-selector label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
-        .combo-grid-selectors { display: grid; grid-template-columns: 1fr; gap: 8px; }
         .sauce-select { background: #1e293b; color: #fff; border: 1px solid #334155; padding: 6px; border-radius: 6px; font-size: 13px; outline: none; width: 100%; box-sizing: border-box; }
         
         .add-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0f172a; border: none; padding: 8px 16px; cursor: pointer; border-radius: 8px; font-weight: 800; font-size: 13px; align-self: flex-end; }
@@ -46,8 +45,6 @@
         .item-row { display: flex; justify-content: space-between; font-size: 13px; }
         .item-sauce { font-size: 11px; color: #f59e0b; font-style: italic; margin-top: 2px; line-height: 1.3; }
         
-        .comment-box { width: 100%; background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #e2e8f0; padding: 4px 6px; font-size: 11px; box-sizing: border-box; }
-        
         .qty-controls { display: flex; align-items: center; gap: 6px; }
         .cant-btn { background: #334155; color: #fff; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 4px; font-size: 11px; }
         .del-btn { background: transparent; color: #ef4444; border: none; cursor: pointer; font-size: 12px; font-weight: bold; }
@@ -55,7 +52,7 @@
         .summary-box { border-top: 1px dashed #334155; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; }
         .btn-send { padding: 12px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; border: none; width: 100%; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 13px; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
 
-        /* PANTALLA DE AGRADECIMIENTO (Oculta por defecto) */
+        /* PANTALLA DE AGRADECIMIENTO */
         .thanks-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 9999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .thanks-card { background: #1e293b; border: 2px solid #f59e0b; border-radius: 20px; padding: 40px 20px; text-align: center; max-width: 450px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .thanks-icon { font-size: 60px; margin-bottom: 20px; }
@@ -76,7 +73,8 @@
         <h1 class="logo-text">SPACE WINGS</h1>
     </header>
 
-    <div class="main-container" id="contenido-principal">
+    <div class="main-container">
+        <!-- Los artículos se inyectarán de forma automática aquí -->
         <section class="catalog-section" id="menu-categorias"></section>
 
         <section class="cart-section">
@@ -90,21 +88,18 @@
         </section>
     </div>
 
-    <!-- Contenedor de Agradecimiento -->
     <div class="thanks-overlay" id="pantalla-gracias">
         <div class="thanks-card">
             <div class="thanks-icon">🚀</div>
             <h2 class="thanks-title">¡PEDIDO ENVIADO!</h2>
-            <p class="thanks-text">Tu orden ha sido procesada. Serás redirigido a WhatsApp para finalizar la comunicación con Space Wings.</p>
+            <p class="thanks-text">Tu orden ha sido procesada con éxito. Comunícate en WhatsApp para coordinar tu entrega.</p>
             <button class="btn-return" onclick="reiniciarMenu()">Hacer otra orden</button>
         </div>
     </div>
 
     <script>
         const salsasDisponibles = ["Bbq Hot", "Buffalo", "Maracuya Hot", "Mango Habanero", "Piña Habanero", "Fresa Habanero"];
-        const snacksDisponibles = ["Papas a la francesa", "Papas Gajo", "Dedos de queso", "Jalapeños rellenos", "Aros de cebolla"];
-        const platillosDisponibles = ["Alitas", "Boneless", "Palomitas"];
-
+        
         const estructuraMenu = [
             {
                 categoria: "Platillo Principal",
@@ -131,37 +126,151 @@
                     { id: "coca_600", nombre: "Coca Cola 600 ml", precio: 35.00 },
                     { id: "coca_25", nombre: "Coca Cola 2.5 Lts", precio: 55.00 }
                 ]
-            },
-            {
-                categoria: "Combos",
-                items: [
-                    { id: "c_estrella", nombre: "Combo Estrella (Platillo + 2 Snacks)", precio: 220.00 }
-                ]
             }
         ];
 
-        // Función que simula el envío y despliega la pantalla
+        let carrito = [];
+
+        // DIBUJAR LOS ELEMENTOS EN PANTALLA AUTOMÁTICAMENTE
+        function renderizarMenu() {
+            const contenedor = document.getElementById("menu-categorias");
+            contenedor.innerHTML = "";
+
+            estructuraMenu.forEach(cat => {
+                const divCat = document.createElement("div");
+                divCat.innerHTML = `<h2 class="category-title">${cat.categoria}</h2>`;
+                
+                const grid = document.createElement("div");
+                grid.className = "products-grid";
+
+                cat.items.forEach(item => {
+                    let selectorSalsaHTML = "";
+                    if(item.requiereSalsa) {
+                        selectorSalsaHTML = `
+                            <div class="sauce-selector">
+                                <label>Elige tu salsa:</label>
+                                <select class="sauce-select" id="salsa-${item.id}">
+                                    ${salsasDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                </select>
+                            </div>
+                        `;
+                    }
+
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+                    card.innerHTML = `
+                        <div class="product-main">
+                            <span class="product-name">${item.nombre}</span>
+                            <span class="product-price">$${item.precio.toFixed(2)}</span>
+                        </div>
+                        ${selectorSalsaHTML}
+                        <button class="add-btn" onclick="agregarAlCarrito('${item.id}', '${item.nombre}', ${item.precio}, ${!!item.requiereSalsa})">Agregar</button>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                divCat.appendChild(grid);
+                contenedor.appendChild(divCat);
+            });
+        }
+
+        // LÓGICA DEL CARRITO DE COMPRAS
+        function agregarAlCarrito(id, nombre, precio, requiereSalsa) {
+            let salsaSeleccionada = "";
+            if(requiereSalsa) {
+                salsaSeleccionada = document.getElementById(`salsa-${id}`).value;
+            }
+
+            const itemExistente = carrito.find(i => i.id === id && i.salsa === salsaSeleccionada);
+
+            if(itemExistente) {
+                itemExistente.cantidad++;
+            } else {
+                carrito.push({ id, nombre, precio, salsa: salsaSeleccionada, cantidad: 1 });
+            }
+            actualizarCarrito();
+        }
+
+        function cambiarCantidad(index, cambio) {
+            carrito[index].cantidad += cambio;
+            if(carrito[index].cantidad <= 0) {
+                carrito.splice(index, 1);
+            }
+            actualizarCarrito();
+        }
+
+        function eliminarItem(index) {
+            carrito.splice(index, 1);
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            const lista = document.getElementById("lista-carrito");
+            const badge = document.getElementById("badge-count");
+            const totalTxt = document.getElementById("tot");
+            
+            lista.innerHTML = "";
+            let total = 0;
+            let totalProductos = 0;
+
+            carrito.forEach((item, index) => {
+                total += item.precio * item.cantidad;
+                totalProductos += item.cantidad;
+
+                const divItem = document.createElement("div");
+                divItem.className = "cart-item";
+                divItem.innerHTML = `
+                    <div class="item-row">
+                        <strong>${item.nombre} x${item.cantidad}</strong>
+                        <span>$${(item.precio * item.cantidad).toFixed(2)}</span>
+                    </div>
+                    ${item.salsa ? `<div class="item-sauce">Salsa: ${item.salsa}</div>` : ''}
+                    <div class="item-row" style="margin-top:5px;">
+                        <div class="qty-controls">
+                            <button class="cant-btn" onclick="cambiarCantidad(${index}, -1)">-</button>
+                            <button class="cant-btn" onclick="cambiarCantidad(${index}, 1)">+</button>
+                        </div>
+                        <button class="del-btn" onclick="eliminarItem(${index})">Eliminar</button>
+                    </div>
+                `;
+                lista.appendChild(divItem);
+            });
+
+            badge.innerText = totalProductos;
+            totalTxt.innerText = total.toFixed(2);
+        }
+
+        // PROCESAR WHATSAPP Y MOSTRAR CONFIRMACIÓN
         function enviarWhatsApp() {
-            const numeroTelefono = "521234567890"; // Reemplaza con tu número real
+            if(carrito.length === 0) {
+                alert("Tu carrito está vacío.");
+                return;
+            }
+
+            const numeroTelefono = "521234567890"; // <- Pon aquí tu celular real con código de país
             const nombreCliente = document.getElementById("cliente_input").value;
             const totalPedido = document.getElementById("tot").innerText;
             
-            // Texto base para codificar en el enlace
-            const mensaje = `Hola Space Wings, mi nombre es ${nombreCliente}. Quiero enviar mi pedido con un total de $${totalPedido}.`;
+            let detalleProductos = "";
+            carrito.forEach(i => {
+                detalleProductos += `- ${i.nombre} (x${i.cantidad}) ${i.salsa ? `[Salsa: ${i.salsa}]` : ''}\n`;
+            });
+
+            const mensaje = `¡Hola Space Wings!\n\n*Cliente:* ${nombreCliente}\n\n*Pedido:*\n${detalleProductos}\n*Total:* $${totalPedido}`;
             const urlWhatsApp = `wa.me{numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
             
-            // Abre WhatsApp en pestaña nueva para no cerrar tu aplicación web
             window.open(urlWhatsApp, '_blank');
-            
-            // Muestra la interfaz de agradecimiento en pantalla
             document.getElementById("pantalla-gracias").style.display = "flex";
         }
 
-        // Función para cerrar la pantalla de agradecimiento y limpiar la vista
         function reiniciarMenu() {
+            carrito = [];
+            actualizarCarrito();
             document.getElementById("pantalla-gracias").style.display = "none";
-            // Aquí puedes añadir código para vaciar el carrito si lo deseas
         }
+
+        // Iniciar la app al cargar la página
+        window.onload = renderizarMenu;
     </script>
 </body>
 </html>
