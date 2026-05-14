@@ -354,7 +354,15 @@
     // Enlace de redirección seguro sin texto basura alrededor
     const urlWhatsApp = "https://wa.me/523411398581?text=" + encodeURIComponent(mensaje);
     window.open(urlWhatsApp, '_blank');
-}
+
+         // Activa la capa visual de agradecimiento
+            document.getElementById("pantalla-gracias").style.display = "flex";
+            
+        }
+        // Función para quitar la pantalla de agradecimiento
+        function cerrarAgradecimiento() {
+            document.getElementById("pantalla-gracias").style.display = "none";
+        }
 
 // Inicialización del carrito vacío en pantalla al cargar
 actualizarInterfaz();
