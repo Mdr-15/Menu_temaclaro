@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Interactivo | Space Wings</title>
+    <title>Menú | Space Wings</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
         header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); text-align: center; padding: 20px; border-bottom: 1px solid #334155; }
@@ -95,13 +95,13 @@
         <div class="thanks-card">
             <div class="thanks-icon">🚀</div>
             <h2 class="thanks-title">¡PEDIDO ENVIADO!</h2>
-            <p class="thanks-text">Tu orden ha sido procesada con éxito. Ya abrimos WhatsApp en otra pestaña para concluir tu entrega.</p>
+            <p class="thanks-text">Tu orden ha sido enviada con éxito. Nos pondremos en contacto para concluir tu entrega.</p>
             <button class="btn-return" onclick="cerrarAgradecimiento()">Hacer otra orden</button>
         </div>
     </div>
 
     <script>
-        const salsasDisponibles = ["Bbq Hot", "Buffalo", "Maracuya Hot", "Mango Habanero", "Piña Habanero", "Fresa Habanero"];
+        const salsasDisponibles = ["Bbq","Bbq Hot", "Buffalo", "Maracuya Hot", "Mango Habanero", "Piña Habanero", "Fresa Habanero"];
         const snacksDisponibles = ["Papas a la francesa", "Papas Gajo", "Dedos de queso", "Jalapeños rellenos", "Aros de cebolla"];
         const platillosDisponibles = ["Alitas", "Boneless", "Palomitas"];
 
@@ -127,16 +127,16 @@
             {
                 categoria: "Bebidas",
                 items: [
-                    { id: "coca_400", nombre: "Coca Cola 400 ml", precio: 25.00 },
-                    { id: "coca_600", nombre: "Coca Cola 600 ml", precio: 35.00 },
-                    { id: "coca_25", nombre: "Coca Cola 2.5 Lts", precio: 55.00 }
+                    { id: "coca_400", nombre: "Coca Cola 400 ml", precio: 20.00 },
+                    { id: "coca_600", nombre: "Coca Cola 600 ml", precio: 30.00 },
+                    { id: "coca_25", nombre: "Coca Cola 2.5 Lts", precio: 40.00 }
                 ]
             },
             {
                 categoria: "Combos",
                 items: [
-                    { id: "c_estrella", nombre: "Combo Estrella (Platillo + 2 Snacks)", precio: 220.00, tipoCombo: "estrella" },
-                    { id: "c_cometa", nombre: "Combo Cometa (2 Platillos + 1 Snack Fijo)", precio: 260.00, tipoCombo: "cometa" }
+                    { id: "c_estrella", nombre: "Combo Estrella (Platillo + 2 Snacks)", precio: 200.00, tipoCombo: "estrella" },
+                    { id: "c_cometa", nombre: "Combo Cometa (2 Platillos + 1 Snack)", precio: 300.00, tipoCombo: "cometa" }
                 ]
             }
         ];
