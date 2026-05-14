@@ -342,7 +342,7 @@
             mensaje += `💰 *TOTAL A PAGO:* $${document.getElementById('tot').textContent}\n\n`;
             mensaje += `¡Muchas gracias! 🙌`;
 
-            const urlWhatsApp = "wa.me" + encodeURIComponent(mensaje);
+                const urlWhatsApp = "https://wa.me/523411398581?text=" + encodeURIComponent(mensaje);
             window.open(urlWhatsApp, '_blank');
 
             document.getElementById("pantalla-gracias").style.display = "flex";
