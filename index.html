@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Interactivo | Space Wings</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); text-align: center; padding: 20px; border-bottom: 1px solid #334155; }
+        .logo-text { font-size: 28px; font-weight: 900; letter-spacing: 4px; color: #f59e0b; margin: 0; }
+        
+        /* Contenedor Principal */
+        .main-container { display: flex; flex-direction: row; flex: 1; max-width: 1200px; width: 100%; margin: 20px auto; padding: 0 20px; gap: 30px; box-sizing: border-box; }
+        
+        /* COLUMNA IZQUIERDA: Categorías y Productos */
+        .catalog-section { flex: 1; display: flex; flex-direction: column; gap: 25px; }
+        .category-title { font-size: 18px; color: #f59e0b; border-bottom: 2px solid #1e293b; padding-bottom: 8px; margin: 0; font-weight: 800; text-transform: uppercase; }
+        .products-grid { display: flex; flex-direction: column; gap: 12px; }
+        
+        /* Tarjeta de Producto */
+        .product-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .product-main { display: flex; justify-content: space-between; align-items: center; }
+        .product-name { font-size: 16px; font-weight: 700; }
+        .product-price { font-size: 15px; font-weight: 800; color: #f59e0b; }
+        
+        /* Selectores internos con Grid para Combos */
+        .sauce-selector { background: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .sauce-selector label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+        .combo-grid-selectors { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .sauce-select { background: #1e293b; color: #fff; border: 1px solid #334155; padding: 6px; border-radius: 6px; font-size: 13px; outline: none; width: 100%; box-sizing: border-box; }
+        
+        .add-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0f172a; border: none; padding: 8px 16px; cursor: pointer; border-radius: 8px; font-weight: 800; font-size: 13px; align-self: flex-end; }
+        
+        /* COLUMNA DERECHA: Carrito Compacto */
+        .cart-section { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; height: max-content; }
+        .digital-cart { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 16px; box-sizing: border-box; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
+        .cart-title { font-size: 16px; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 10px; margin: 0 0 12px 0; display: flex; justify-content: space-between; }
+        .cart-count { background: #f59e0b; color: #0f172a; font-size: 11px; padding: 2px 6px; border-radius: 10px; }
+        
+        .client-box { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+        .client-box label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+        .client-box input { background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; padding: 8px; font-size: 13px; outline: none; }
+        
+        .cart-list { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
+        .cart-item { display: flex; flex-direction: column; gap: 6px; background: #0f172a; padding: 10px; border-radius: 8px; border: 1px solid #334155; }
+        .item-row { display: flex; justify-content: space-between; font-size: 13px; }
+        .item-sauce { font-size: 11px; color: #f59e0b; font-style: italic; margin-top: 2px; line-height: 1.3; }
+        
+        .comment-box { width: 100%; background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #e2e8f0; padding: 4px 6px; font-size: 11px; box-sizing: border-box; }
+        
+        .qty-controls { display: flex; align-items: center; gap: 6px; }
+        .cant-btn { background: #334155; color: #fff; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 4px; font-size: 11px; }
+        .del-btn { background: transparent; color: #ef4444; border: none; cursor: pointer; font-size: 12px; font-weight: bold; }
+        
+        .summary-box { border-top: 1px dashed #334155; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; }
+        .btn-send { padding: 12px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; border: none; width: 100%; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 13px; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
+
+        /* PANTALLA DE AGRADECIMIENTO (Oculta por defecto) */
+        .thanks-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 9999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .thanks-card { background: #1e293b; border: 2px solid #f59e0b; border-radius: 20px; padding: 40px 20px; text-align: center; max-width: 450px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .thanks-icon { font-size: 60px; margin-bottom: 20px; }
+        .thanks-title { font-size: 26px; font-weight: 900; color: #f59e0b; margin: 0 0 15px 0; }
+        .thanks-text { font-size: 15px; color: #94a3b8; line-height: 1.6; margin: 0 0 25px 0; }
+        .btn-return { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: #fff; border: 1px solid #475569; padding: 12px 24px; cursor: pointer; border-radius: 8px; font-weight: 700; font-size: 14px; text-transform: uppercase; transition: all 0.3s; }
+        .btn-return:hover { border-color: #f59e0b; color: #f59e0b; }
+
+        @media (max-width: 768px) {
+            .main-container { flex-direction: column; padding: 0 10px; }
+            .cart-section { width: 100%; position: relative; top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="logo-text">SPACE WINGS</h1>
+    </header>
+
+    <div class="main-container" id="contenido-principal">
+        <section class="catalog-section" id="menu-categorias"></section>
+
+        <section class="cart-section">
+            <div class="digital-cart">
+                <div class="cart-title"><span>🛒 Pedido</span><span class="cart-count" id="badge-count">0</span></div>
+                <div class="client-box"><label>Cliente</label><input type="text" id="cliente_input" value="Cliente Nuevo"></div>
+                <div class="cart-list" id="lista-carrito"></div>
+                <div class="summary-box"><span>Total:</span><strong>$<span id="tot">0.00</span></strong></div>
+                <button class="btn-send" onclick="enviarWhatsApp()">💬 ENVIAR POR WHATSAPP</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contenedor de Agradecimiento -->
+    <div class="thanks-overlay" id="pantalla-gracias">
+        <div class="thanks-card">
+            <div class="thanks-icon">🚀</div>
+            <h2 class="thanks-title">¡PEDIDO ENVIADO!</h2>
+            <p class="thanks-text">Tu orden ha sido procesada. Serás redirigido a WhatsApp para finalizar la comunicación con Space Wings.</p>
+            <button class="btn-return" onclick="reiniciarMenu()">Hacer otra orden</button>
+        </div>
+    </div>
+
+    <script>
+        const salsasDisponibles = ["Bbq Hot", "Buffalo", "Maracuya Hot", "Mango Habanero", "Piña Habanero", "Fresa Habanero"];
+        const snacksDisponibles = ["Papas a la francesa", "Papas Gajo", "Dedos de queso", "Jalapeños rellenos", "Aros de cebolla"];
+        const platillosDisponibles = ["Alitas", "Boneless", "Palomitas"];
+
+        const estructuraMenu = [
+            {
+                categoria: "Platillo Principal",
+                items: [
+                    { id: "alitas", nombre: "Alitas", precio: 120.00, requiereSalsa: true },
+                    { id: "boneless", nombre: "Boneless", precio: 120.00, requiereSalsa: true },
+                    { id: "palomitas", nombre: "Palomitas", precio: 120.00, requiereSalsa: true }
+                ]
+            },
+            {
+                categoria: "Snacks",
+                items: [
+                    { id: "Papas_francesa", nombre: "Papas a la francesa", precio: 70.00 },
+                    { id: "Papas_gajo", nombre: "Papas Gajo", precio: 70.00 },
+                    { id: "Dedos_queso", nombre: "Dedos de queso", precio: 80.00 },
+                    { id: "Jalapenos", nombre: "Jalapeños rellenos", precio: 80.00 },
+                    { id: "Aros_cebolla", nombre: "Aros de cebolla", precio: 70.00 }
+                ]
+            },
+            {
+                categoria: "Bebidas",
+                items: [
+                    { id: "coca_400", nombre: "Coca Cola 400 ml", precio: 25.00 },
+                    { id: "coca_600", nombre: "Coca Cola 600 ml", precio: 35.00 },
+                    { id: "coca_25", nombre: "Coca Cola 2.5 Lts", precio: 55.00 }
+                ]
+            },
+            {
+                categoria: "Combos",
+                items: [
+                    { id: "c_estrella", nombre: "Combo Estrella (Platillo + 2 Snacks)", precio: 220.00 }
+                ]
+            }
+        ];
+
+        // Función que simula el envío y despliega la pantalla
+        function enviarWhatsApp() {
+            const numeroTelefono = "521234567890"; // Reemplaza con tu número real
+            const nombreCliente = document.getElementById("cliente_input").value;
+            const totalPedido = document.getElementById("tot").innerText;
+            
+            // Texto base para codificar en el enlace
+            const mensaje = `Hola Space Wings, mi nombre es ${nombreCliente}. Quiero enviar mi pedido con un total de $${totalPedido}.`;
+            const urlWhatsApp = `wa.me{numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+            
+            // Abre WhatsApp en pestaña nueva para no cerrar tu aplicación web
+            window.open(urlWhatsApp, '_blank');
+            
+            // Muestra la interfaz de agradecimiento en pantalla
+            document.getElementById("pantalla-gracias").style.display = "flex";
+        }
+
+        // Función para cerrar la pantalla de agradecimiento y limpiar la vista
+        function reiniciarMenu() {
+            document.getElementById("pantalla-gracias").style.display = "none";
+            // Aquí puedes añadir código para vaciar el carrito si lo deseas
+        }
+    </script>
+</body>
+</html>
