@@ -55,15 +55,6 @@
         .summary-box { border-top: 1px dashed #334155; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; }
         .btn-send { padding: 12px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; border: none; width: 100%; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 13px; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
 
-        /* DISEÑO DE LA PANTALLA DE AGRADECIMIENTO */
-        .thanks-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 9999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .thanks-card { background: #1e293b; border: 2px solid #f59e0b; border-radius: 20px; padding: 40px 20px; text-align: center; max-width: 450px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .thanks-icon { font-size: 60px; margin-bottom: 20px; }
-        .thanks-title { font-size: 26px; font-weight: 900; color: #f59e0b; margin: 0 0 15px 0; }
-        .thanks-text { font-size: 15px; color: #94a3b8; line-height: 1.6; margin: 0 0 25px 0; }
-        .btn-return { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: #fff; border: 1px solid #475569; padding: 12px 24px; cursor: pointer; border-radius: 8px; font-weight: 700; font-size: 14px; text-transform: uppercase; transition: all 0.3s; }
-        .btn-return:hover { border-color: #f59e0b; color: #f59e0b; }
-
         @media (max-width: 768px) {
             .main-container { flex-direction: column; padding: 0 10px; }
             .cart-section { width: 100%; position: relative; top: 0; }
@@ -88,16 +79,6 @@
                 <button class="btn-send" onclick="enviarWhatsApp()">💬 ENVIAR POR WHATSAPP</button>
             </div>
         </section>
-    </div>
-
-    <!-- Estructura de la pantalla de agradecimiento -->
-    <div class="thanks-overlay" id="pantalla-gracias">
-        <div class="thanks-card">
-            <div class="thanks-icon">🚀</div>
-            <h2 class="thanks-title">¡PEDIDO ENVIADO!</h2>
-            <p class="thanks-text">Tu orden ha sido procesada. Serás redirigido a WhatsApp para finalizar la comunicación con Space Wings.</p>
-            <button class="btn-return" onclick="cerrarAgradecimiento()">Hacer otra orden</button>
-        </div>
     </div>
 
     <script>
@@ -141,26 +122,232 @@
             }
         ];
 
-        // FUNCIÓN MODIFICADA: Envía a WhatsApp y activa la pantalla
-        function enviarWhatsApp() {
-            const numeroTelefono = "521234567890"; // <- Cambia por tu número de teléfono real
-            const nombreCliente = document.getElementById("cliente_input").value;
-            const totalPedido = document.getElementById("tot").innerText;
+        let carrito = [];
+
+        const contenedorMenu = document.getElementById('menu-categorias');
+        estructuraMenu.forEach(cat => {
+            let catHTML = `<div class="products-grid"><h2 class="category-title">${cat.categoria}</h2>`;
             
-            const mensaje = `Hola Space Wings, mi nombre es ${nombreCliente}. Quiero enviar mi pedido con un total de $${totalPedido}.`;
-            const urlWhatsApp = `wa.me{numeroTelefono}?text=${encodeURIComponent(mensaje)}`;
+            cat.items.forEach(prod => {
+                let bloqueSelectores = "";
+                
+                if (prod.requiereSalsa) {
+                    bloqueSelectores = `
+                        <div class="sauce-selector">
+                            <label>Salsa para el platillo:</label>
+                            <select class="sauce-select" id="salsa_${prod.id}">
+                                ${salsasDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
+                            </select>
+                        </div>`;
+                }
+                
+                // Renderizado para el Combo Estrella (1 Platillo + 2 Snacks de libre elección)
+                if (prod.tipoCombo === "estrella") {
+                    bloqueSelectores = `
+                        <div class="sauce-selector">
+                            <label style="color:#f59e0b; margin-bottom:4px; display:block;">⚙️ Configura tu Combo Estrella:</label>
+                            <div class="combo-grid-selectors">
+                                <select class="sauce-select" id="platillo_${prod.id}">
+                                    ${platillosDisponibles.map(p => `<option value="${p}">${p}</option>`).join('')}
+                                </select>
+                                <select class="sauce-select" id="salsacombo_${prod.id}">
+                                    ${salsasDisponibles.map(s => `<option value="${s}">Salsa: ${s}</option>`).join('')}
+                                </select>
+                                <select class="sauce-select" id="snack1_${prod.id}">
+                                    <option value="" disabled selected>Elegir Snack 1</option>
+                                    ${snacksDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                </select>
+                                <select class="sauce-select" id="snack2_${prod.id}">
+                                    <option value="" disabled selected>Elegir Snack 2</option>
+                                    ${snacksDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>`;
+                }
+
+                // Renderizado para el Combo Cometa (2 Platillos libres + 1 Snack Predeterminado/Fijo)
+                if (prod.tipoCombo === "cometa") {
+                    bloqueSelectores = `
+                        <div class="sauce-selector">
+                            <label style="color:#f59e0b; margin-bottom:4px; display:block;">⚙️ Configura tu Combo Cometa:</label>
+                            <div class="combo-grid-selectors">
+                                <span style="font-size:11px; font-weight:bold; color:#94a3b8; display:block; margin-top:2px;">PLATILLO PRINCIPAL 1:</span>
+                                <select class="sauce-select" id="c1_p1_${prod.id}">
+                                    ${platillosDisponibles.map(p => `<option value="${p}">${p}</option>`).join('')}
+                                </select>
+                                <select class="sauce-select" id="c1_s1_${prod.id}">
+                                    ${salsasDisponibles.map(s => `<option value="${s}">Salsa 1: ${s}</option>`).join('')}
+                                </select>
+
+                                <span style="font-size:11px; font-weight:bold; color:#94a3b8; display:block; margin-top:6px;">PLATILLO PRINCIPAL 2:</span>
+                                <select class="sauce-select" id="c2_p2_${prod.id}">
+                                    ${platillosDisponibles.map(p => `<option value="${p}">${p}</option>`).join('')}
+                                </select>
+                                <select class="sauce-select" id="c2_s2_${prod.id}">
+                                    ${salsasDisponibles.map(s => `<option value="${s}">Salsa 2: ${s}</option>`).join('')}
+                                </select>
+
+                                <span style="font-size:11px; font-weight:bold; color:#94a3b8; display:block; margin-top:6px;">SNACK INCLUIDO (FIJO):</span>
+                                <select class="sauce-select" id="snack_fijo_${prod.id}">
+                                    ${snacksDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>`;
+                }
+
+                catHTML += `
+                    <div class="product-card">
+                        <div class="product-main">
+                            <span class="product-name">${prod.nombre}</span>
+                            <span class="product-price">$${prod.precio.toFixed(2)}</span>
+                        </div>
+                        ${bloqueSelectores}
+                        <button class="add-btn" onclick="agregarAlCarrito('${cat.categoria}', '${prod.id}')">Agregar +</button>
+                    </div>`;
+            });
             
-            // Abre el chat en una pestaña nueva
-            window.open(urlWhatsApp, '_blank');
+            catHTML += `</div>`;
+            contenedorMenu.innerHTML += catHTML;
+        });
+
+        function agregarAlCarrito(catNombre, prodId) {
+            const cat = estructuraMenu.find(c => c.categoria === catNombre);
+            const prod = cat.items.find(p => p.id === prodId);
             
-            // Activa la capa visual de agradecimiento
-            document.getElementById("pantalla-gracias").style.display = "flex";
+            let configuracionAdicional = "";
+
+            if (prod.tipoCombo === "estrella") {
+                const pBase = document.getElementById(`platillo_${prodId}`).value;
+                const sCombo = document.getElementById(`salsacombo_${prodId}`).value;
+                const s1 = document.getElementById(`snack1_${prodId}`).value;
+                const s2 = document.getElementById(`snack2_${prodId}`).value;
+
+                if (!s1 || !s2) {
+                    alert("Por favor, selecciona ambos snacks antes de agregar el combo.");
+                    return;
+                }
+                configuracionAdicional = `[${pBase} c/ ${sCombo} + ${s1} + ${s2}]`;
+            } else if (prod.tipoCombo === "cometa") {
+                const p1 = document.getElementById(`c1_p1_${prodId}`).value;
+                const s1 = document.getElementById(`c1_s1_${prodId}`).value;
+                const p2 = document.getElementById(`c2_p2_${prodId}`).value;
+                const s2 = document.getElementById(`c2_s2_${prodId}`).value;
+                const snackFijo = document.getElementById(`snack_fijo_${prodId}`).value;
+
+                configuracionAdicional = `[${p1} c/ ${s1} + ${p2} c/ ${s2} + ${snackFijo}]`;
+            } else if (prod.requiereSalsa) {
+                configuracionAdicional = document.getElementById(`salsa_${prodId}`).value;
+            }
+
+            const existe = carrito.find(item => item.id === prodId && item.detalles === configuracionAdicional);
+            
+            if (existe) {
+                existe.cantidad++;
+            } else {
+                carrito.push({ ...prod, cantidad: 1, detalles: configuracionAdicional, comentario: "" });
+            }
+            actualizarInterfaz();
         }
 
-        // Función para quitar la pantalla de agradecimiento
-        function cerrarAgradecimiento() {
-            document.getElementById("pantalla-gracias").style.display = "none";
+        function cambiarCantidad(id, detalles, cambio) {
+            const item = carrito.find(p => p.id === id && p.detalles === detalles);
+            if (!item) return;
+            item.cantidad += cambio;
+            if (item.cantidad <= 0) {
+                carrito = carrito.filter(p => !(p.id === id && p.detalles === detalles));
+            }
+            actualizarInterfaz();
         }
-    </script>
+
+        function eliminarDelCarrito(id, detalles) {
+            carrito = carrito.filter(p => !(p.id === id && p.detalles === detalles));
+            actualizarInterfaz();
+        }
+
+        function guardarComentario(id, detalles, texto) {
+            const item = carrito.find(p => p.id === id && p.detalles === detalles);
+            if (item) { item.comentario = texto; }
+        }
+
+        function actualizarInterfaz() {
+            const listaHTML = document.getElementById('lista-carrito');
+            listaHTML.innerHTML = "";
+            let cuentaTotal = 0;
+            let totalArticulos = 0;
+
+            if(carrito.length === 0) {
+                listaHTML.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px; font-size:12px;">Carrito vacío.</div>`;
+            }
+
+            carrito.forEach(item => {
+                let importeItem = item.precio * item.cantidad;
+                cuentaTotal += importeItem;
+                totalArticulos += item.cantidad;
+
+                let lineaDetalle = item.detalles ? `<div class="item-sauce">${item.detalles}</div>` : "";
+
+                listaHTML.innerHTML += `
+                    <div class="cart-item">
+                        <div class="item-row">
+                            <div style="flex:1; min-width:0; padding-right:4px;">
+                                <strong style="font-size:13px; display:block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${item.nombre}</strong>
+                                ${lineaDetalle}
+                                <span style="color:#f59e0b; font-weight:700; font-size:12px;">$${importeItem.toFixed(2)}</span>
+                            </div>
+                            <div class="qty-controls">
+                                <button class="cant-btn" onclick="cambiarCantidad('${item.id}', '${item.detalles}', -1)">-</button>
+                                <span style="font-size:12px; font-weight:700;">${item.cantidad}</span>
+                                <button class="cant-btn" onclick="cambiarCantidad('${item.id}', '${item.detalles}', 1)">+</button>
+                                <button class="del-btn" onclick="eliminarDelCarrito('${item.id}', '${item.detalles}')">×</button>
+                            </div>
+                        </div>
+                        <input type="text" class="comment-box" placeholder="Notas (salsa, aderezo...)" value="${item.comentario}" oninput="guardarComentario('${item.id}', '${item.detalles}', this.value)">
+                    </div>`;
+            });
+
+            document.getElementById('badge-count').textContent = totalArticulos;
+            document.getElementById('tot').textContent = cuentaTotal.toFixed(2);
+        }
+
+        function enviarWhatsApp() {
+    if(carrito.length === 0) {
+        alert("Por favor, agrega al menos un producto al carrito antes de enviar.");
+        return;
+    }
+
+    const nombreCliente = document.getElementById('cliente_input').value.trim();
+    
+    // Construcción del mensaje de texto formateado para Space Wings
+    let mensaje = `🚀 *NUEVO PEDIDO - SPACE WINGS* 🚀\n`;
+    mensaje += `👤 *Cliente:* ${nombreCliente}\n`;
+    mensaje += `-------------------------------------\n`;
+    
+    carrito.forEach(item => {
+        let subtotal = item.precio * item.cantidad;
+        mensaje += `📦 *${item.cantidad}x* ${item.nombre}\n`;
+        
+        // Inyecta el desglose de salsas o los 2 snacks elegidos en el combo
+        if(item.detalles) {
+            mensaje += `   ✨ _Config: ${item.detalles}_\n`;
+        }
+        // Inyecta los comentarios adicionales por artículo si existen
+        if (item.comentario && item.comentario.trim() !== "") {
+            mensaje += `   📝 _Nota: ${item.comentario.trim()}_\n`;
+        }
+        mensaje += `   💰 _Subtotal: $${subtotal.toFixed(2)}_\n`;
+    });
+    
+    mensaje += `-------------------------------------\n`;
+    mensaje += `💰 *TOTAL A PAGO:* $${document.getElementById('tot').textContent}\n\n`;
+    mensaje += `¡Muchas gracias! 🙌`;
+
+    // Enlace de redirección seguro sin texto basura alrededor
+    const urlWhatsApp = "https://wa.me/523411398581?text=" + encodeURIComponent(mensaje);
+    window.open(urlWhatsApp, '_blank');
+}
+
+// Inicialización del carrito vacío en pantalla al cargar
+actualizarInterfaz();
+</script>
 </body>
 </html>
