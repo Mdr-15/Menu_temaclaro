@@ -714,15 +714,20 @@
         }
 
         function cambiarCantidad(uid, cambio) {
-            const item = carrito.find(i => i.uid === uid);
-            if (!item) return;
-            item.cantidad += cambio;
-            if (item.cantidad <= 0) {
-                eliminarDelCarrito(uid);
-            } else {
-                actualizarInterfazCarrito();
-            }
-        }
+    const item = carrito.find(i => i.uid === uid);
+    if (!item) return;
+
+    // Si cambio es mayor que 0 (botón +), suma 0.5. Si es menor (botón -), resta 0.5.
+    const ajusteDecimal = cambio > 0 ? 0.5 : -0.5;
+    item.cantidad += ajusteDecimal;
+
+    if (item.cantidad <= 0) {
+        eliminarDelCarrito(uid);
+    } else {
+        actualizarInterfazCarrito();
+    }
+}
+
 
         function eliminarDelCarrito(uid) {
             carrito = carrito.filter(item => item.uid !== uid);
