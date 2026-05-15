@@ -3,358 +3,784 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú | Space Wings</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); text-align: center; padding: 20px; border-bottom: 1px solid #334155; }
-        .logo-text { font-size: 28px; font-weight: 900; letter-spacing: 4px; color: #f59e0b; margin: 0; }
-        
-        /* Contenedor Principal */
-        .main-container { display: flex; flex-direction: row; flex: 1; max-width: 1200px; width: 100%; margin: 20px auto; padding: 0 20px; gap: 30px; box-sizing: border-box; }
-        
-        /* COLUMNA IZQUIERDA: Categorías y Productos */
-        .catalog-section { flex: 1; display: flex; flex-direction: column; gap: 25px; }
-        .category-title { font-size: 18px; color: #f59e0b; border-bottom: 2px solid #1e293b; padding-bottom: 8px; margin: 20px 0 10px 0; font-weight: 800; text-transform: uppercase; }
-        .products-grid { display: flex; flex-direction: column; gap: 12px; }
-        
-        /* Tarjeta de Producto */
-        .product-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .product-main { display: flex; justify-content: space-between; align-items: center; }
-        .product-name { font-size: 16px; font-weight: 700; }
-        .product-price { font-size: 15px; font-weight: 800; color: #f59e0b; }
-        
-        /* Selectores internos con Grid para Combos */
-        .sauce-selector { background: #0f172a; border: 1px solid #475569; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .sauce-selector label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
-        .combo-grid-selectors { display: grid; grid-template-columns: 1fr; gap: 8px; }
-        .sauce-select { background: #1e293b; color: #fff; border: 1px solid #334155; padding: 6px; border-radius: 6px; font-size: 13px; outline: none; width: 100%; box-sizing: border-box; }
-        
-        .add-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0f172a; border: none; padding: 8px 16px; cursor: pointer; border-radius: 8px; font-weight: 800; font-size: 13px; align-self: flex-end; }
-        
-        /* COLUMNA DERECHA: Carrito Compacto */
-        .cart-section { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 20px; height: max-content; }
-        .digital-cart { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 16px; box-sizing: border-box; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
-        .cart-title { font-size: 16px; font-weight: 800; border-bottom: 1px solid #334155; padding-bottom: 10px; margin: 0 0 12px 0; display: flex; justify-content: space-between; }
-        .cart-count { background: #f59e0b; color: #0f172a; font-size: 11px; padding: 2px 6px; border-radius: 10px; }
-        
-        .client-box { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
-        .client-box label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
-        .client-box input { background: #0f172a; border: 1px solid #334155; border-radius: 6px; color: #fff; padding: 8px; font-size: 13px; outline: none; }
-        
-        .cart-list { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow-y: auto; margin-bottom: 12px; }
-        .cart-item { display: flex; flex-direction: column; gap: 6px; background: #0f172a; padding: 10px; border-radius: 8px; border: 1px solid #334155; }
-        .item-row { display: flex; justify-content: space-between; font-size: 13px; }
-        .item-sauce { font-size: 11px; color: #f59e0b; font-style: italic; margin-top: 2px; line-height: 1.3; }
-        
-        .comment-box { width: 100%; background: #1e293b; border: 1px solid #475569; border-radius: 4px; color: #e2e8f0; padding: 4px 6px; font-size: 11px; box-sizing: border-box; }
-        
-        .qty-controls { display: flex; align-items: center; gap: 6px; }
-        .cant-btn { background: #334155; color: #fff; border: none; width: 20px; height: 20px; cursor: pointer; border-radius: 4px; font-size: 11px; }
-        .del-btn { background: transparent; color: #ef4444; border: none; cursor: pointer; font-size: 12px; font-weight: bold; }
-        
-        .summary-box { border-top: 1px dashed #334155; padding-top: 10px; display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 12px; }
-        .btn-send { padding: 12px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; border: none; width: 100%; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 13px; text-align: center; text-decoration: none; display: block; box-sizing: border-box; }
+    <title>Space Wings - Menú Digital</title>
+   <style>
+    /* VARIABLES DE COLOR - PALETA SUAVE Y RELAJANTE */
+    :root {
+        --bg-pantalla: #F3F4F6;      /* Gris lino claro para descansar la vista */
+        --bg-tarjeta: #FFFFFF;       /* Blanco puro para los contenedores */
+        --bg-desplegable: #F8FAFC;   /* Fondo sutil para campos interactivos */
+        --texto-principal: #334155;  /* Gris pizarra oscuro (suave para lectura) */
+        --texto-secundario: #64748B; /* Gris medio para etiquetas de categorías */
+        --color-acento: #C27D38;     /* Tono café canela suave para títulos y precios */
+        --color-boton: #475569;      /* Gris piedra para botones de acción */
+        --color-exito: #4D7C0F;      /* Verde oliva suave para el botón enviar */
+        --borde-sutil: #E2E8F0;      /* Líneas divisorias tenues */
+        --fuente: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
 
-        /* PANTALLA DE AGRADECIMIENTO */
-        .thanks-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); z-index: 9999; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .thanks-card { background: #1e293b; border: 2px solid #f59e0b; border-radius: 20px; padding: 40px 20px; text-align: center; max-width: 450px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .thanks-icon { font-size: 60px; margin-bottom: 20px; }
-        .thanks-title { font-size: 26px; font-weight: 900; color: #f59e0b; margin: 0 0 15px 0; }
-        .thanks-text { font-size: 15px; color: #94a3b8; line-height: 1.6; margin: 0 0 25px 0; }
-        .btn-return { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: #fff; border: 1px solid #475569; padding: 12px 24px; cursor: pointer; border-radius: 8px; font-weight: 700; font-size: 14px; text-transform: uppercase; transition: all 0.3s; }
-        .btn-return:hover { border-color: #f59e0b; color: #f59e0b; }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        @media (max-width: 768px) {
-            .main-container { flex-direction: column; padding: 0 10px; }
-            .cart-section { width: 100%; position: relative; top: 0; }
+    body {
+        background-color: var(--bg-pantalla);
+        color: var(--texto-principal);
+        font-family: var(--fuente);
+        padding: 30px 20px;
+        line-height: 1.5;
+    }
+
+    h1 {
+        text-align: center;
+        color: var(--color-acento);
+        font-size: 2.4rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 40px;
+    }
+
+    /* CONTENEDOR PRINCIPAL (DOS COLUMNAS) */
+    .contenedor {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 30px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--texto-secundario);
+        border-bottom: 2px solid var(--borde-sutil);
+        padding-bottom: 8px;
+        margin-bottom: 25px;
+        margin-top: 20px;
+    }
+
+    /* GRID DE PLATILLOS */
+    #platillos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
+    }
+
+    /* TARJETAS DE PRODUCTOS */
+    .platillo {
+        background-color: var(--bg-tarjeta);
+        border: 1px solid var(--borde-sutil);
+        border-radius: 14px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .platillo:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .platillo h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--texto-principal);
+        margin-bottom: 5px;
+    }
+
+    .platillo p {
+        color: var(--color-acento);
+        font-weight: 600;
+        font-size: 1.15rem;
+        margin-bottom: 15px;
+    }
+
+    /* SELECTORES DESPLEGABLES */
+    select {
+        width: 100%;
+        background-color: var(--bg-desplegable);
+        color: var(--texto-principal);
+        border: 1px solid var(--borde-sutil);
+        padding: 11px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+        outline: none;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+
+    select:focus {
+        border-color: var(--color-acento);
+    }
+
+    /* BOTONES AGREGAR */
+    button {
+        background-color: var(--color-boton);
+        color: #FFFFFF;
+        border: none;
+        padding: 11px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        width: 100%;
+        text-transform: uppercase;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #334155;
+    }
+
+    /* SECCIÓN DE COMBOS */
+    #combos {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .combo {
+        background-color: var(--bg-tarjeta);
+        border: 1px solid var(--borde-sutil);
+        border-radius: 14px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .combo h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .combo p {
+        color: var(--color-acento);
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+    }
+
+    /* BARRA LATERAL DEL PEDIDO (CARRITO) */
+    .pedido {
+        background-color: var(--bg-tarjeta);
+        border: 1px solid var(--borde-sutil);
+        border-radius: 14px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+        position: sticky;
+        top: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .pedido h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        border: none;
+        padding: 0;
+        color: var(--texto-principal);
+    }
+
+    #nombre {
+        width: 100%;
+        padding: 12px;
+        background-color: var(--bg-desplegable);
+        border: 1px solid var(--borde-sutil);
+        border-radius: 8px;
+        color: var(--texto-principal);
+        font-size: 0.9rem;
+        outline: none;
+        margin-bottom: 20px;
+        transition: border-color 0.2s;
+    }
+
+    #nombre:focus {
+        border-color: var(--color-acento);
+    }
+
+    #carrito p {
+        color: var(--texto-secundario);
+        font-size: 0.9rem;
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    /* ELEMENTOS DENTRO DEL CARRITO (GENERADOS POR JS) */
+    .platillo-en-carrito {
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--borde-sutil);
+        font-size: 0.95rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-eliminar {
+        background: none !important;
+        border: none !important;
+        color: #EF4444 !important;
+        cursor: pointer;
+        font-weight: bold;
+        width: auto !important;
+        padding: 0 5px !important;
+    }
+
+    /* FOOTER DEL PEDIDO */
+    .pedido p:last-of-type {
+        border-top: 1px solid var(--borde-sutil);
+        padding-top: 20px;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--texto-principal);
+    }
+
+    /* BOTÓN ENVIAR PEDIDO */
+    #enviar {
+        background-color: var(--color-exito);
+        color: #FFFFFF;
+        margin-top: 15px;
+        padding: 14px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    #enviar:hover {
+        opacity: 0.9;
+    }
+
+    /* CONFIGURADOR DE COMBOS */
+    .config-combo {
+        background-color: transparent;
+        color: var(--color-acento);
+        border: 1px dashed var(--color-acento);
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: inline-block;
+        width: auto;
+    }
+
+    /* RESPONSIVO PARA PANTALLAS MÓVILES */
+    @media (max-width: 900px) {
+        .contenedor {
+            grid-template-columns: 1fr;
         }
-    </style>
+        body {
+            padding: 15px 10px;
+        }
+    }
+</style>
+
 </head>
 <body>
 
-    <header>
-        <h1 class="logo-text">SPACE WINGS</h1>
-    </header>
+    <!-- CONTENEDOR PRINCIPAL DE LA TIENDA -->
+    <div id="pantalla-tienda">
+        <main>
+            <h1 class="logo">Space Wings</h1>
+            <h2 class="seccion-titulo">Nuestras Especialidades</h2>
+            <div id="contenedor-individuales" class="grid-productos"></div>
+            <h2 class="seccion-titulo">Combos Space Wings</h2>
+            <div id="contenedor-combos"></div>
+        </main>
 
-    <div class="main-container">
-        <section class="catalog-section" id="menu-categorias"></section>
-
-        <section class="cart-section">
-            <div class="digital-cart">
-                <div class="cart-title"><span>🛒 Pedido</span><span class="cart-count" id="badge-count">0</span></div>
-                <div class="client-box"><label>Cliente</label><input type="text" id="cliente_input" value="Cliente Nuevo"></div>
-                <div class="cart-list" id="lista-carrito"></div>
-                <div class="summary-box"><span>Total:</span><strong>$<span id="tot">0.00</span></strong></div>
-                <button class="btn-send" onclick="enviarWhatsApp()">💬 ENVIAR POR WHATSAPP</button>
-            </div>
-        </section>
+        <aside class="panel-pedido">
+            <div class="cabecera-pedido"><h2>🛒 Pedido</h2><div class="contador-badge" id="badge-contador">0</div></div>
+            <div style="margin-top: 5px;"><label class="label-cliente">Cliente *</label><input type="text" id="nombre-cliente" class="input-nombre" placeholder="Ingresa tu nombre"></div>
+            <div class="Carrito-elementos" id="carrito-lista"><p id="carrito-vacio-texto" style="color: #718096; text-align: center; margin-top: 15px; font-size: 0.75rem;">Carrito vacío.</p></div>
+            <div class="Total"><span>Total:</span><span id="carrito-total">$0.00</span></div>
+            <button class="Boton-enviar" id="btn-whatsapp">Enviar Pedido</button>
+        </aside>
     </div>
 
-    <!-- Capa de la pantalla de agradecimiento -->
-    <div class="thanks-overlay" id="pantalla-gracias">
-        <div class="thanks-card">
-            <div class="thanks-icon">🚀</div>
-            <h2 class="thanks-title">¡PEDIDO ENVIADO!</h2>
-            <p class="thanks-text">Tu orden ha sido enviada con éxito. Nos pondremos en contacto para concluir tu entrega.</p>
-            <button class="btn-return" onclick="cerrarAgradecimiento()">Hacer otra orden</button>
+    <!-- SECCIÓN INTERACTIVA DE AGRADECIMIENTO -->
+    <div id="pantalla-agradecimiento" style="display: none; text-align: center; padding: 40px 20px; background-color: #161a1f; border-radius: 12px; max-width: 450px; margin: 40px auto; border: 1px solid #232931; box-sizing: border-box;">
+        <span style="font-size: 3.5rem;">🚀</span>
+        <h2 style="color: #ff9f00; text-transform: uppercase; margin-top: 10px; font-size: 1.4rem;">¡Pedido Confirmado!</h2>
+        <p style="font-size: 1rem; color: #ffffff; margin-bottom: 5px;">Muchas gracias por tu compra, <strong id="agradecimiento-cliente" style="color: #ff9f00;"></strong>.</p>
+        <p style="color: #a0aec0; font-size: 0.85rem; margin-top: 0;">Tu orden está siendo procesada en la estación de control.</p>
+        <div style="background-color: #0d0f12; padding: 12px; border-radius: 8px; margin: 15px 0; border: 1px solid #232931;">
+            <span style="color: #a0aec0; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;">Total a pagar:</span>
+            <div id="agradecimiento-total" style="font-size: 1.6rem; color: #ff9f00; font-weight: bold; margin-top: 3px;">$0.00</div>
         </div>
+        <button onclick="volverAlMenu()" style="background-color: #ff9f00; color: #0d0f12; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; width: 100%;">Volver al Menú</button>
     </div>
 
     <script>
-        const salsasDisponibles = ["Bbq","Bbq Hot", "Buffalo", "Maracuya Hot", "Mango Habanero", "Piña Habanero", "Fresa Habanero"];
-        const snacksDisponibles = ["Papas a la francesa", "Papas Gajo", "Dedos de queso", "Jalapeños rellenos", "Aros de cebolla"];
-        const platillosDisponibles = ["Alitas", "Boneless", "Palomitas"];
+        const urlGoogleSheets = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5rO4smgDCoyQggGHUfR40G1zudA8tf_Tcwnvl4KPRoyhRVq0jlaUfY3DCQBA_M2Bcxyja7SaPzAz7/pub?gid=0&single=true&output=csv"; 
 
-        const estructuraMenu = [
-            {
-                categoria: "Platillo Principal",
-                items: [
-                    { id: "alitas", nombre: "Alitas", precio: 120.00, requiereSalsa: true },
-                    { id: "boneless", nombre: "Boneless", precio: 120.00, requiereSalsa: true },
-                    { id: "palomitas", nombre: "Palomitas", precio: 120.00, requiereSalsa: true }
-                ]
-            },
-            {
-                categoria: "Snacks",
-                items: [
-                    { id: "Papas_francesa", nombre: "Papas a la francesa", precio: 70.00 },
-                    { id: "Papas_gajo", nombre: "Papas Gajo", precio: 70.00 },
-                    { id: "Dedos_queso", nombre: "Dedos de queso", precio: 80.00 },
-                    { id: "Jalapenos", nombre: "Jalapeños rellenos", precio: 80.00 },
-                    { id: "Aros_cebolla", nombre: "Aros de cebolla", precio: 70.00 }
-                ]
-            },
-            {
-                categoria: "Bebidas",
-                items: [
-                    { id: "coca_400", nombre: "Coca Cola 400 ml", precio: 20.00 },
-                    { id: "coca_600", nombre: "Coca Cola 600 ml", precio: 30.00 },
-                    { id: "coca_25", nombre: "Coca Cola 2.5 Lts", precio: 40.00 }
-                ]
-            },
-            {
-                categoria: "Combos",
-                items: [
-                    { id: "c_estrella", nombre: "Combo Estrella (Platillo + 2 Snacks)", precio: 200.00, tipoCombo: "estrella" },
-                    { id: "c_cometa", nombre: "Combo Cometa (2 Platillos + 1 Snack)", precio: 300.00, tipoCombo: "cometa" }
-                ]
-            }
-        ];
-
+         
+        let baseDatosProductos = { individuales: [], combos: [] };
         let carrito = [];
-        const contenedorMenu = document.getElementById('menu-categorias');
 
-        estructuraMenu.forEach(cat => {
-            let catHTML = `<div class="products-grid"><h2 class="category-title">${cat.categoria}</h2>`;
-            
-            cat.items.forEach(prod => {
-                let bloqueSelectores = "";
-                
-                if (prod.requiereSalsa) {
-                    bloqueSelectores = `
-                    <div class="sauce-selector">
-                        <label>Salsa para el platillo:</label>
-                        <select class="sauce-select" id="salsa_${prod.id}">
-                            ${salsasDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
-                        </select>
-                    </div>`;
-                }
-
-                if (prod.tipoCombo === "estrella") {
-                    bloqueSelectores = `
-                    <div class="sauce-selector">
-                        <label style="color:#f59e0b; margin-bottom:4px; display:block;">⚙ Configura tu Combo Estrella:</label>
-                        <div class="combo-grid-selectors">
-                            <select class="sauce-select" id="platillo_${prod.id}">
-                                ${platillosDisponibles.map(p => `<option value="${p}">${p}</option>`).join('')}
-                            </select>
-                            <select class="sauce-select" id="salsacombo_${prod.id}">
-                                ${salsasDisponibles.map(s => `<option value="${s}">Salsa: ${s}</option>`).join('')}
-                            </select>
-                            <select class="sauce-select" id="snack1_${prod.id}">
-                                <option value="" disabled selected>Elegir Snack 1</option>
-                                ${snacksDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
-                            </select>
-                            <select class="sauce-select" id="snack2_${prod.id}">
-                                <option value="" disabled selected>Elegir Snack 2</option>
-                                ${snacksDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
-                            </select>
-                        </div>
-                    </div>`;
-                }
-
-                if (prod.tipoCombo === "cometa") {
-                    bloqueSelectores = `
-                    <div class="sauce-selector">
-                        <label style="color:#f59e0b; margin-bottom:4px; display:block;">⚙ Configura tu Combo Cometa:</label>
-                        <div class="combo-grid-selectors">
-                            <span style="font-size:11px; font-weight:bold; color:#94a3b8; display:block; margin-top:2px;">PLATILLO PRINCIPAL 1:</span>
-                            <select class="sauce-select" id="c1_p1_${prod.id}">
-                                ${platillosDisponibles.map(p => `<option value="${p}">${p}</option>`).join('')}
-                            </select>
-                            <select class="sauce-select" id="c1_s1_${prod.id}">
-                                ${salsasDisponibles.map(s => `<option value="${s}">Salsa 1: ${s}</option>`).join('')}
-                            </select>
-                            <span style="font-size:11px; font-weight:bold; color:#94a3b8; display:block; margin-top:6px;">PLATILLO PRINCIPAL 2:</span>
-                            <select class="sauce-select" id="c2_p2_${prod.id}">
-                                ${platillosDisponibles.map(p => `<option value="${p}">${p}</option>`).join('')}
-                            </select>
-                            <select class="sauce-select" id="c2_s2_${prod.id}">
-                                ${salsasDisponibles.map(s => `<option value="${s}">Salsa 2: ${s}</option>`).join('')}
-                            </select>
-                            <span style="font-size:11px; font-weight:bold; color:#94a3b8; display:block; margin-top:6px;">SNACK INCLUIDO (FIJO):</span>
-                            <select class="sauce-select" id="snack_fijo_${prod.id}">
-                                ${snacksDisponibles.map(s => `<option value="${s}">${s}</option>`).join('')}
-                            </select>
-                        </div>
-                    </div>`;
-                }
-
-                catHTML += `
-                <div class="product-card">
-                    <div class="product-main">
-                        <span class="product-name">${prod.nombre}</span>
-                        <span class="product-price">$${prod.precio.toFixed(2)}</span>
-                    </div>
-                    ${bloqueSelectores}
-                    <button class="add-btn" onclick="agregarAlCarrito('${cat.categoria}', '${prod.id}')">Agregar +</button>
-                </div>`;
-            });
-
-            catHTML += `</div>`;
-            contenedorMenu.innerHTML += catHTML;
-        });
-
-        function agregarAlCarrito(catNombre, prodId) {
-            const cat = estructuraMenu.find(c => c.categoria === catNombre);
-            const prod = cat.items.find(p => p.id === prodId);
-            let configuracionAdicional = "";
-
-            if (prod.tipoCombo === "estrella") {
-                const pBase = document.getElementById(`platillo_${prodId}`).value;
-                const sCombo = document.getElementById(`salsacombo_${prodId}`).value;
-                const s1 = document.getElementById(`snack1_${prodId}`).value;
-                const s2 = document.getElementById(`snack2_${prodId}`).value;
-                if (!s1 || !s2) {
-                    alert("Por favor, selecciona ambos snacks antes de agregar el combo.");
-                    return;
-                }
-                configuracionAdicional = `[${pBase} c/ ${sCombo} + ${s1} + ${s2}]`;
-            } else if (prod.tipoCombo === "cometa") {
-                const p1 = document.getElementById(`c1_p1_${prodId}`).value;
-                const s1 = document.getElementById(`c1_s1_${prodId}`).value;
-                const p2 = document.getElementById(`c2_p2_${prodId}`).value;
-                const s2 = document.getElementById(`c2_s2_${prodId}`).value;
-                const snackFijo = document.getElementById(`snack_fijo_${prodId}`).value;
-                configuracionAdicional = `[${p1} c/ ${s1} + ${p2} c/ ${s2} + ${snackFijo}]`;
-            } else if (prod.requiereSalsa) {
-                configuracionAdicional = document.getElementById(`salsa_${prodId}`).value;
+        async function cargarMenuCompleto() {
+            try {
+                const respuesta = await fetch(urlGoogleSheets);
+                const textoCSV = await respuesta.text();
+                baseDatosProductos = parsearEstructuraMenu(textoCSV);
+                renderizarArticulosIndividuales(baseDatosProductos.individuales);
+                renderizarCombosDinamicos(baseDatosProductos.combos);
+                actualizarInterfazCarrito();
+            } catch (error) {
+                console.error("Fallo al inicializar base de datos:", error);
             }
-
-            const existe = carrito.find(item => item.id === prodId && item.detalles === configuracionAdicional);
-            if (existe) {
-                existe.cantidad++;
-            } else {
-                carrito.push({ ...prod, cantidad: 1, detalles: configuracionAdicional, comentario: "" });
-            }
-            actualizarInterfaz();
         }
 
-        function cambiarCantidad(id, detalles, cambio) {
-            const item = carrito.find(p => p.id === id && p.detalles === detalles);
+        function limpiarTextoSheets(celda) {
+            if (!celda) return '';
+            return celda.trim().replace(/^"|"$/g, '').trim();
+        }
+
+        // === MOTOR DE PARSEO CORREGIDO CON INDEXACIÓN ESTRICTA ===
+        function parsearEstructuraMenu(texto) {
+            const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const individuales = [];
+            const combosAgrupados = {};
+            let leyendoCombos = false;
+
+            // Índices basados rigurosamente en tu captura de imagen real de Google Sheets
+            const idxId = 0;   // Columna A (Id_platillo)
+            const idxCat = 1;  // Columna B (Categoria)
+            const idxNom = 2;  // Columna C (Producto)
+            const idxPre = 3;  // Columna D (Precio)
+            const idxDisp = 4; // Columna E (Disponible)
+            const idxComboPaso = 5; // Columna F (Categoria de paso de combo)
+            const idxComboProd = 6; // Columna G (Producto interno de combo)
+
+            for (let i = 0; i < lineas.length; i++) {
+                const linea = lineas[i];
+                const columnas = linea.split(',').map(limpiarTextoSheets);
+
+                if (!columnas || columnas[idxId] === 'Id_platillo' || columnas[idxId] === 'CONF') {
+                    if (i > 1 && columnas[idxId] === 'Id_platillo') {
+                        leyendoCombos = true;
+                    }
+                    continue;
+                }
+
+                const disponible = columnas[idxDisp] ? columnas[idxDisp].toLowerCase() === 'si' : false;
+                if (!disponible) continue;
+
+                // CORRECCIÓN CRÍTICA: Se evalúa el índice [0] del arreglo para evitar congelar el script
+                if (columnas[idxId].startsWith('P') && !leyendoCombos) {
+                    const producto = {
+                        id: columnas[idxId],
+                        categoria: columnas[idxCat],
+                        nombre: columnas[idxNom],
+                        precio: parseFloat(columnas[idxPre]) || 0,
+                        salsas: []
+                    };
+                    
+                    // Extraer salsas horizontales de la primera tabla
+                    for (let s = 5; s < columnas.length; s++) {
+                        if (columnas[s]) {
+                            producto.salsas.push(columnas[s]);
+                        }
+                    }
+                    individuales.push(producto);
+                } 
+                
+                // CORRECCIÓN CRÍTICA: Se evalúa el índice [0] para agrupar los combos multi-opción
+                if (columnas[idxId].startsWith('C')) {
+                    const comboId = columnas[idxId];
+                    const nombreCombo = columnas[idxNom]; 
+                    const precioCombo = parseFloat(columnas[idxPre]) || 0; 
+                    
+                    const componenteCategoria = columnas[idxComboPaso]; 
+                    const componenteProducto = columnas[idxComboProd];  
+                    
+                    const salsasComponente = [];
+                    // Las salsas de los combos inician en la columna H (índice 7) en adelante
+                    for (let s = 7; s < columnas.length; s++) {
+                        if (columnas[s]) salsasComponente.push(columnas[s]);
+                    }
+
+                    if (!combosAgrupados[comboId]) {
+                        combosAgrupados[comboId] = { id: comboId, nombre: nombreCombo, precio: precioCombo, secciones: {} };
+                    }
+                    if (!combosAgrupados[comboId].secciones[componenteCategoria]) {
+                        combosAgrupados[comboId].secciones[componenteCategoria] = [];
+                    }
+                    combosAgrupados[comboId].secciones[componenteCategoria].push({ nombre: componenteProducto, salsas: salsasComponente });
+                }
+            }
+            return { individuales, combos: Object.values(combosAgrupados) };
+        }
+
+        function renderizarArticulosIndividuales(productos) {
+            const contenedor = document.getElementById('contenedor-individuales');
+            if (!contenedor) return;
+            contenedor.innerHTML = '';
+
+            productos.forEach(prod => {
+                let selectSalsas = '';
+                if (prod.salsas.length > 0) {
+                    selectSalsas = `
+                        <select id="salsa-${prod.id}" style="margin-top:6px; padding: 4px; font-size:0.8rem;">
+                            <option value="">-- Selecciona Salsa --</option>
+                            ${prod.salsas.map(s => `<option value="${s}">${s}</option>`).join('')}
+                        </select>`;
+                }
+
+                contenedor.innerHTML += `
+                    <div class="tarjeta-producto">
+                        <div>
+                            <span class="tag-categoria">${prod.categoria}</span>
+                            <h3 style="margin:4px 0; font-size:1rem;">${prod.nombre}</h3>
+                            <p class="precio">$${prod.precio.toFixed(2)}</p>
+                            ${selectSalsas}
+                        </div>
+                        <button class="btn-agregar-individual" onclick="agregarIndividualAlCarrito('${prod.id}')">Agregar +</button>
+                    </div>`;
+            });
+        }
+
+        function renderizarCombosDinamicos(combos) {
+            const contenedor = document.getElementById('contenedor-combos');
+            if (!contenedor) return;
+            contenedor.innerHTML = '';
+
+            combos.forEach(combo => {
+                let htmlCampos = '';
+                let indexPaso = 0;
+                let referenciasAInicializar = [];
+
+                for (const [nombreSeccion, opciones] of Object.entries(combo.secciones)) {
+                    const idSelectProducto = `combo-${combo.id}-prod-${indexPaso}`;
+                    const idSelectSalsa = `combo-${combo.id}-salsa-${indexPaso}`;        
+                    
+                    const esPlatilloPrincipal = nombreSeccion.toLowerCase().includes("platillo principal");
+                    const esFijo = opciones.length === 1;
+
+                    let htmlOpciones = opciones.map(opc => `<option value="${opc.nombre}">${opc.nombre}</option>`).join('');
+                    let etiquetaLabel = `${nombreSeccion.toUpperCase()}:`;
+                    if (esFijo && nombreSeccion.toLowerCase().includes("snack")) {
+                        etiquetaLabel = `SNACK INCLUIDO (FIJO):`;
+                    }
+
+                    let bloqueSalsa = '';
+                    if (esPlatilloPrincipal) {
+                        const numeroSalsa = nombreSeccion.replace(/\D/g, ""); 
+                        bloqueSalsa = `
+                            <div class="campo-grupo" style="margin-top:6px;">
+                                <label>SALSA ${numeroSalsa || 1}:</label>
+                                <select id="${idSelectSalsa}" style="padding: 4px; font-size:0.8rem;">
+                                    <option value="">-- Selecciona tu Salsa --</option>
+                                </select>
+                            </div>`;
+                        
+                        referenciasAInicializar.push({ idCombo: combo.id, nombreSeccion: nombreSeccion, idProd: idSelectProducto, idSalsa: idSelectSalsa });
+                    }
+
+                    htmlCampos += `
+                        <div class="campo-grupo">
+                            <label>${etiquetaLabel}</label>
+                            <select id="${idSelectProducto}" onchange="actualizarSalsasEstructuraNueva('${combo.id}', '${nombreSeccion}', ${indexPaso})" style="padding: 4px; font-size:0.8rem;">
+                                ${htmlOpciones}
+                            </select>
+                            ${bloqueSalsa}
+                        </div>`;
+                    
+                    indexPaso++;
+                }
+
+                contenedor.innerHTML += `
+                    <div class="tarjeta-combo-full">
+                        <div class="header-combo">
+                            <h3>${combo.nombre}</h3>
+                            <span class="precio-combo">$${combo.precio.toFixed(2)}</span>
+                        </div>
+                        <div class="config-box">
+                            <div style="color: #ff9f00; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 12px;">⚙️ Configura tu ${combo.nombre.toLowerCase()}:</div>
+                            ${htmlCampos}
+                        </div>
+                        <div style="overflow:hidden;">
+                            <button class="btn-agregar-combo" onclick="agregarComboEstructuraNueva('${combo.id}')">Agregar +</button>
+                        </div>
+                    </div>`;
+
+                setTimeout(() => {
+                    referenciasAInicializar.forEach(ref => {
+                        const pSel = document.getElementById(ref.idProd);
+                        const sSel = document.getElementById(ref.idSalsa);
+                        if (pSel && sSel) {
+                            const productoSeleccionado = pSel.value;
+                            const datosOpcion = combo.secciones[ref.nombreSeccion].find(o => o.nombre === productoSeleccionado);
+                            if (datosOpcion && datosOpcion.salsas.length > 0) {
+                                sSel.innerHTML = `<option value="">-- Selecciona tu Salsa --</option>` + 
+                                    datosOpcion.salsas.map(s => `<option value="${s}">${s}</option>`).join('');
+                            }
+                        }
+                    });
+                }, 60);
+            });
+        }
+
+        function actualizarSalsasEstructuraNueva(comboId, nombreSeccion, indexPaso) {
+            const combo = baseDatosProductos.combos.find(c => c.id === comboId);
+            const prodSelect = document.getElementById(`combo-${comboId}-prod-${indexPaso}`);
+            const salsaSelect = document.getElementById(`combo-${comboId}-salsa-${indexPaso}`);
+            if (!combo || !prodSelect || !salsaSelect) return;
+
+            const productoSeleccionado = prodSelect.value;
+            const datosOpcion = combo.secciones[nombreSeccion].find(o => o.nombre === productoSeleccionado);
+
+            if (datosOpcion && datosOpcion.salsas.length > 0) {
+                salsaSelect.innerHTML = `<option value="">-- Selecciona tu Salsa --</option>` + 
+                    datosOpcion.salsas.map(s => `<option value="${s}">${s}</option>`).join('');
+                salsaSelect.disabled = false;
+            } else {
+                salsaSelect.innerHTML = `<option value="">No requiere salsa</option>`;
+                salsaSelect.disabled = true;
+            }
+        }
+
+        function agregarIndividualAlCarrito(id) {
+            const producto = baseDatosProductos.individuales.find(p => p.id === id);
+            if (!producto) return;
+
+            const selectSalsa = document.getElementById(`salsa-${id}`);
+            const salsaSeleccionada = selectSalsa ? selectSalsa.value : '';
+
+            if (producto.salsas.length > 0 && !salsaSeleccionada) {
+                alert("Por favor selecciona una salsa para tus alitas o snacks.");
+                return;
+            }
+
+            const itemExistente = carrito.find(item => item.id === id && item.salsa === salsaSeleccionada);
+            if (itemExistente) { 
+                itemExistente.cantidad++; 
+            } else {
+                carrito.push({ uid: Date.now() + Math.random(), id: producto.id, nombre: producto.nombre, precio: producto.precio, salsa: salsaSeleccionada, cantidad: 1, nota: "" });
+            }
+            if (selectSalsa) selectSalsa.value = '';
+            actualizarInterfazCarrito();
+        }
+
+        function agregarComboEstructuraNueva(comboId) {
+            const combo = baseDatosProductos.combos.find(c => c.id === comboId);
+            if (!combo) return;
+
+            let configuracionFinal = [];
+            let validacionCorrecta = true;
+
+            let index = 0;
+            for (const [nombreSeccion, opciones] of Object.entries(combo.secciones)) {
+                const prodSelect = document.getElementById(`combo-${comboId}-prod-${index}`);
+                const salsaSelect = document.getElementById(`combo-${comboId}-salsa-${index}`);
+
+                const nombreArticulo = prodSelect ? prodSelect.value : '';
+                const salsaArticulo = (salsaSelect && !salsaSelect.disabled) ? salsaSelect.value : '';
+
+                if (!nombreArticulo) { validacionCorrecta = false; break; }
+
+                if (salsaSelect && !salsaSelect.disabled && !salsaArticulo) {
+                    alert(`Por favor elige la salsa para tu ${nombreSeccion.toLowerCase()}: ${nombreArticulo}`);
+                    validacionCorrecta = false;
+                    break;
+                }
+
+                configuracionFinal.push(`${nombreArticulo}${salsaArticulo ? ` (🌶️ ${salsaArticulo})` : ''}`);
+                index++;
+            }
+
+            if (!validacionCorrecta) return;
+
+            const descripcionCombo = `[${configuracionFinal.join(' + ')}]`;
+            const itemExistente = carrito.find(item => item.id === comboId && item.descripcion === descripcionCombo);
+
+            if (itemExistente) { itemExistente.cantidad++; } 
+            else {
+                carrito.push({ uid: Date.now() + Math.random(), id: combo.id, nombre: combo.nombre, descripcion: descripcionCombo, precio: combo.precio, cantidad: 1, nota: "" });
+            }
+            actualizarInterfazCarrito();
+        }
+
+        function cambiarCantidad(uid, cambio) {
+            const item = carrito.find(i => i.uid === uid);
             if (!item) return;
             item.cantidad += cambio;
             if (item.cantidad <= 0) {
-                carrito = carrito.filter(p => !(p.id === id && p.detalles === detalles));
+                eliminarDelCarrito(uid);
+            } else {
+                actualizarInterfazCarrito();
             }
-            actualizarInterfaz();
         }
 
-        function eliminarDelCarrito(id, detalles) {
-            carrito = carrito.filter(p => !(p.id === id && p.detalles === detalles));
-            actualizarInterfaz();
+        function eliminarDelCarrito(uid) {
+            carrito = carrito.filter(item => item.uid !== uid);
+            actualizarInterfazCarrito();
         }
 
-        function guardarComentario(id, detalles, texto) {
-            const item = carrito.find(p => p.id === id && p.detalles === detalles);
-            if (item) { item.comentario = texto; }
+        function actualizarNotaItem(uid, textoNota) {
+            const item = carrito.find(i => i.uid === uid);
+            if (item) item.nota = textoNota;
         }
 
-        function actualizarInterfaz() {
-            const listaHTML = document.getElementById('lista-carrito');
-            listaHTML.innerHTML = "";
-            let cuentaTotal = 0;
-            let totalArticulos = 0;
+        function actualizarInterfazCarrito() {
+            const contenedorLista = document.getElementById('carrito-lista');
+            const badgeContador = document.getElementById('badge-contador');
+            const totalTexto = document.getElementById('carrito-total');
 
-            if(carrito.length === 0) {
-                listaHTML.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px; font-size:12px;">Carrito vacío.</div>`;
-            }
+            let montoTotal = 0;
+            let piezasTotales = 0;
 
-            carrito.forEach(item => {
-                let importeItem = item.precio * item.cantidad;
-                cuentaTotal += importeItem;
-                totalArticulos += item.cantidad;
-                let lineaDetalle = item.detalles ? `<div class="item-sauce">${item.detalles}</div>` : "";
+            contenedorLista.innerHTML = '<p id="carrito-vacio-texto" style="color: #718096; text-align: center; margin-top: 20px; font-size: 0.75rem;">Carrito vacío.</p>';
+            const txtRef = document.getElementById('carrito-vacio-texto');
+
+            if (carrito.length > 0) {
+                if (txtRef) txtRef.style.display = 'none';
                 
-                listaHTML.innerHTML += `
-                <div class="cart-item">
-                    <div class="item-row">
-                        <div style="flex:1; min-width:0; padding-right:4px;">
-                            <strong style="font-size:13px; display:block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${item.nombre}</strong>
-                            ${lineaDetalle}
-                            <span style="color:#f59e0b; font-weight:700; font-size:12px;">$${importeItem.toFixed(2)}</span>
-                        </div>
-                        <div class="qty-controls">
-                            <button class="cant-btn" onclick="cambiarCantidad('${item.id}', '${item.detalles}', -1)">-</button>
-                            <span style="font-size:12px; font-weight:700;">${item.cantidad}</span>
-                            <button class="cant-btn" onclick="cambiarCantidad('${item.id}', '${item.detalles}', 1)">+</button>
-                            <button class="del-btn" onclick="eliminarDelCarrito('${item.id}', '${item.detalles}')">×</button>
-                        </div>
-                    </div>
-                    <input type="text" class="comment-box" placeholder="Notas (salsa, aderezo...)" value="${item.comentario}" oninput="guardarComentario('${item.id}', '${item.detalles}', this.value)">
-                </div>`;
-            });
+                carrito.forEach((item) => {
+                    const subtotal = item.precio * item.cantidad;
+                    montoTotal += subtotal;
+                    piezasTotales += item.cantidad;
 
-            document.getElementById('badge-count').textContent = totalArticulos;
-            document.getElementById('tot').textContent = cuentaTotal.toFixed(2);
-        }
-
-        function enviarWhatsApp() {
-            if(carrito.length === 0) {
-                alert("Por favor, agrega al menos un producto al carrito antes de enviar.");
-                return;
+                    const fila = document.createElement('div');
+                    fila.classList.add('item-carrito-fila');
+                    fila.innerHTML = `
+                        <div class="item-encabezado-flex">
+                            <div>
+                                <p class="item-titulo-carrito">${item.nombre}</p>
+                                ${item.salsa ? `<p class="item-salsa-carrito">${item.salsa}</p>` : ''}
+                                ${item.descripcion ? `<p class="item-desc-carrito">${item.descripcion}</p>` : ''}
+                                <p class="item-precio-carrito">$${subtotal.toFixed(2)}</p>
+                            </div>
+                            <div class="controles-contenedor">
+                                <div class="item-botones-qty">
+                                    <button onclick="cambiarCantidad(${item.uid}, -1)">-</button>
+                                    <span>${item.cantidad}</span>
+                                    <button onclick="cambiarCantidad(${item.uid}, 1)">+</button>
+                                </div>
+                                <button class="btn-cancelar" onclick="eliminarDelCarrito(${item.uid})">×</button>
+                            </div>
+                        </div>
+                        <input type="text" class="input-nota-carrito" placeholder="Notas (salsa, aderezo...)" value="${item.nota}" oninput="actualizarNotaItem(${item.uid}, this.value)">
+                    `;
+                    contenedorLista.appendChild(fila);
+                });
             }
-            const nombreCliente = document.getElementById('cliente_input').value.trim();
 
-            let mensaje = `🚀 *NUEVO PEDIDO - SPACE WINGS* 🚀\n`;
-            mensaje += `👤 *Cliente:* ${nombreCliente}\n`;
-            mensaje += `-------------------------------------\n`;
-            
-            carrito.forEach(item => {
-                let subtotal = item.precio * item.cantidad;
-                mensaje += `📦 *${item.cantidad} x* ${item.nombre}\n`;
-                if(item.detalles) { mensaje += ` ✨ _Config: ${item.detalles}_\n`; }
-                if (item.comentario && item.comentario.trim() !== "") { mensaje += ` 📝 _Nota: ${item.comentario.trim()}_\n`; }
-                mensaje += ` 💰 _Subtotal: $${subtotal.toFixed(2)}_\n`;
-            });
-            
-            mensaje += `-------------------------------------\n`;
-            mensaje += `💰 *TOTAL A PAGO:* $${document.getElementById('tot').textContent}\n\n`;
-            mensaje += `¡Muchas gracias! 🙌`;
-
-                const urlWhatsApp = "https://wa.me/523411398581?text=" + encodeURIComponent(mensaje);
-            window.open(urlWhatsApp, '_blank');
-
-            document.getElementById("pantalla-gracias").style.display = "flex";
+            if (badgeContador) badgeContador.innerText = piezasTotales;
+            if (totalTexto) totalTexto.innerText = `$${montoTotal.toFixed(2)}`;
         }
 
-        function cerrarAgradecimiento() {
-            carrito = [];
-            actualizarInterfaz();
-            document.getElementById("pantalla-gracias").style.display = "none";
+        // === FUNCIÓN CORREGIDA: ENVÍA POR WHATSAPP Y LUEGO MUESTRA EL AGRADECIMIENTO ===
+function despacharPedidoAWhatsApp() {
+    const cliente = document.getElementById('nombre-cliente').value.trim();
+    if (!cliente) { alert("Por favor escribe tu nombre."); return; }
+    if (carrito.length === 0) { alert("Tu carrito está vacío."); return; }
+
+    // =========================================================================
+    // COLOCA AQUÍ TU TELÉFONO REAL DE ATENCIÓN (CON CLAVE DE PAÍS, SIN ESPACIOS NI SIGNOS +)
+    // Ej: "521XXXXXXXXXX" (Si es México, pon 521 seguido de tus 10 dígitos)
+    // =========================================================================
+    //const miTelefonoSpaceWings = "521234567890"; 
+
+    // Estructurar el texto que llegará a tu celular
+    let msg = `🚀 *NUEVO PEDIDO - SPACE WINGS* 🚀\n\n`;
+    msg += `👤 *Cliente:* ${cliente}\n`;
+    msg += `-------------------------------------------\n`;
+
+    let totalPedido = 0;
+    carrito.forEach(item => {
+        const sub = item.precio * item.cantidad;
+        totalPedido += sub;
+        msg += `📦 *${item.cantidad}x* ${item.nombre}\n`;
+        if (item.salsa) msg += `   └ Salsa: ${item.salsa}\n`;
+        if (item.descripcion) msg += `   └ ${item.descripcion}\n`;
+        if (item.nota) msg += `   └ Nota: _${item.nota}_\n`;
+        msg += `   └ Subtotal: $${sub.toFixed(2)}\n\n`;
+    });
+
+    msg += `-------------------------------------------\n`;
+    msg += `💰 *TOTAL A PAGAR:* $${totalPedido.toFixed(2)}`;
+
+    // 1. ABRIR EL CHAT DE WHATSAPP OFICIAL CON EL PEDIDO LISTO
+   const urlApi = "https://wa.me/523411398581?text=" + encodeURIComponent(msg);
+    window.open(urlApi, '_blank');
+
+    // 2. INYECTAR DATOS EN LA INTERFAZ DE TU PÁGINA WEB
+    document.getElementById('agradecimiento-cliente').innerText = cliente;
+    document.getElementById('agradecimiento-total').innerText = `$${totalPedido.toFixed(2)}`;
+
+    // 3. CAMBIAR DE PANTALLA EN TU SITIO WEB TRAS EL ENVÍO
+    document.getElementById('pantalla-tienda').style.display = 'none';
+    document.getElementById('pantalla-agradecimiento').style.display = 'block';
+
+    // Limpiar carrito de compras local
+    carrito = [];
+    actualizarInterfazCarrito();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+        function volverAlMenu() {
+            document.getElementById('pantalla-agradecimiento').style.display = 'none';
+            document.getElementById('pantalla-tienda').style.display = 'flex';
+            document.getElementById('nombre-cliente').value = '';
         }
 
-        actualizarInterfaz();
+       document.addEventListener('DOMContentLoaded', () => {
+    cargarMenuCompleto();
+    
+    const btnWhatsapp = document.getElementById('btn-whatsapp');
+    if (btnWhatsapp) {
+        btnWhatsapp.addEventListener('click', despacharPedidoAWhatsApp);
+    }
+
+    // LÓGICA MÓVIL: Abre/cierra el carrito al tocar la barra superior en celular
+    const panelPedido = document.querySelector('aside.panel-pedido');
+    const cabeceraPedido = document.querySelector('.cabecera-pedido') || document.querySelector('aside.panel-pedido h2');
+    
+    if (cabeceraPedido && panelPedido) {
+        cabeceraPedido.addEventListener('click', () => {
+            if (window.innerWidth <= 990) {
+                panelPedido.classList.toggle('expandido');
+            }
+        });
+    }
+});
+
+// Interceptores para abrir el carrito hacia arriba de forma automática al presionar "AGREGAR +"
+const originalAgregarIndividual = agregarIndividualAlCarrito;
+agregarIndividualAlCarrito = function(id) {
+    originalAgregarIndividual(id);
+    forzarAperturaCarritoMovil();
+};
+
+const originalAgregarCombo = agregarComboEstructuraNueva;
+if (typeof agregarComboEstructuraNueva !== 'undefined') {
+    agregarComboEstructuraNueva = function(comboId) {
+        originalAgregarCombo(comboId);
+        forzarAperturaCarritoMovil();
+    };
+}
+
+function forzarAperturaCarritoMovil() {
+    if (window.innerWidth <= 990) {
+        const panel = document.querySelector('aside.panel-pedido');
+        if (panel) panel.classList.add('expandido');
+    }
+}
+
     </script>
 </body>
 </html>
