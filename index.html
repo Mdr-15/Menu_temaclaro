@@ -306,32 +306,87 @@
             display: flex;
         }
 
-        /* --- CORRECCIÓN EN VISTA CELULAR (MANTIENE EL CARRITO VISIBLE ABAJO) --- */
-        @media (max-width: 850px) {
-            body {
+        /* --- DISEÑO RESPONSIVO: CARRITO FLOTANTE MINIMIZABLE EN CELULAR --- */
+        @media (max-width: 990px) { 
+            body { 
+                flex-direction: column; 
+            } 
+            #pantalla-tienda { 
                 flex-direction: column; 
             }
-            #pantalla-tienda {
-                flex-direction: column;
-            }
             main {
-                padding: 15px; 
+                padding: 15px;
+                padding-top: 70px; /* 🚀 SOLUCIÓN: Empuja el nombre de Space Wings hacia abajo en celulares */
+                padding-bottom: 90px; /* Espacio inferior seguro para la barra flotante */
             }
+            
+            /* El panel lateral se convierte en una barra colapsable */
             aside.panel-pedido { 
                 width: 100%; 
-                height: auto; 
-                position: relative; 
-                border-left: none;
-                border-top: 2px solid #e2e8f0; 
-                padding: 20px 15px;
-            }
-            .Carrito-elementos {
-                max-height: 300px; 
+                height: auto;
+                max-height: 60px; /* Altura compacta por defecto: NO tapa tus artículos */
+                position: fixed; 
+                bottom: 0; 
+                left: 0;
+                right: 0;
+                border-left: none; 
+                border-top: 2px solid #ff9f00; 
+                background-color: #161a1f;
+                padding: 10px 15px;
+                box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.7); 
+                border-radius: 16px 16px 0 0; 
+                overflow: hidden;
+                transition: max-height 0.4s ease-in-out; /* Animación suave al abrir/cerrar */
+                z-index: 9999;
+            } 
+            
+            /* Clase dinámica que se activará desde JS para expandir el carrito completo */
+            aside.panel-pedido.expandido {
+                max-height: 80vh; /* Se abre hacia arriba cubriendo el 80% de la pantalla de forma controlada */
                 overflow-y: auto;
-                margin-bottom: 15px;
+            }
+
+            /* Forzamos que la cabecera del pedido actúe como un botón táctil */
+            .cabecera-pedido {
+                cursor: pointer;
+                padding-bottom: 5px;
+            }
+
+            .Carrito-elementos {
+                max-height: 250px; 
+                margin-top: 10px;
+            }
+            
+            /* Ocultamos el campo del cliente si el carrito está cerrado para ahorrar espacio */
+            aside.panel-pedido:not(.expandido) .Cliente,
+            aside.panel-pedido:not(.expandido) .Carrito-elementos,
+            aside.panel-pedido:not(.expandido) .Boton-enviar {
+                display: none !important;
+            }
+            
+            /* Rediseño de la barra delgada inferior cuando está colapsado */
+            aside.panel-pedido:not(.expandido) .Total {
+                border-top: none;
+                margin-top: 0;
+                padding-top: 0;
+                display: inline-flex;
+                float: left;
+                font-size: 1rem;
+                line-height: 24px;
+            }
+            
+            /* Añadimos una flecha indicadora o texto de apoyo visual en móviles */
+            .cabecera-pedido::after {
+                content: ' 🔼 Ver Carrito';
+                color: #ff9f00;
+                font-size: 0.8rem;
+                font-weight: bold;
+            }
+            aside.panel-pedido.expandido .cabecera-pedido::after {
+                content: ' 🔽 Ocultar';
             }
         }
-</style>
+    </style>
   
 </head>
 <body>
