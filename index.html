@@ -8,7 +8,7 @@
         /* --- ESTILOS BASE SPACE WINGS (Tema Claro Elegante) --- */
         body { 
             background-color: #f3f4f6; /* Fondo gris lino muy suave, evita el resplandor del blanco puro */
-            color: #334155; /* Texto gris pizarra oscuro en lugar de negro para una lectura orgánica */
+            color: #334155; /* Texto gris pizarra oscuro para una lectura orgánica */
             font-family: 'Arial', sans-serif; 
             margin: 0; 
             display: flex; 
@@ -46,14 +46,14 @@
             margin-top: 15px; 
         }
         .tarjeta-producto { 
-            background-color: #ffffff; /* Tarjetas blancas limpias que resaltan del fondo */
+            background-color: #ffffff; /* Tarjetas blancas limpias */
             border: 1px solid #e2e8f0; /* Borde sutil y minimalista */
             border-radius: 10px; 
             padding: 15px; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); /* Sombra tenue para dar profundidad */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); 
         }
         .tag-categoria { 
             background-color: #f1f5f9; /* Fondo gris muy suave */
@@ -101,7 +101,7 @@
             font-weight: bold;
         }
         .config-box {
-            background-color: #f8fafc; /* Contenedor interno ligeramente más claro */
+            background-color: #f8fafc; 
             border: 1px solid #e2e8f0;
             border-radius: 6px;
             padding: 12px;
@@ -112,7 +112,7 @@
         }
         .campo-grupo label {
             display: block;
-            color: #64748b; /* Gris medio legible */
+            color: #64748b; 
             font-size: 0.7rem;
             font-weight: bold;
             text-transform: uppercase;
@@ -129,7 +129,7 @@
             box-sizing: border-box;
         }
         .btn-agregar-combo {
-            background-color: #475569; /* Gris piedra oscuro para los botones principales */
+            background-color: #475569; 
             color: #ffffff; 
             border: none;
             padding: 10px 20px;
@@ -162,7 +162,7 @@
             background-color: #334155;
         }
 
-        /* --- INTERFAZ LATERAL FIJA (ESCRITORIO) --- */
+        /* --- INTERFAZ LATERAL FIJA (ESCRITORIO Y ADAPTADO A MÓVIL) --- */
         aside.panel-pedido { 
             width: 320px; 
             background-color: #ffffff; 
@@ -298,12 +298,38 @@
         .btn-cancelar {
             background: none;
             border: none;
-            color: #ef4444; /* Rojo suave para la acción de eliminar */
+            color: #ef4444; 
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             padding: 0;
             display: flex;
+        }
+
+        /* --- CORRECCIÓN EN VISTA CELULAR (MANTIENE EL CARRITO VISIBLE ABAJO) --- */
+        @media (max-width: 850px) {
+            body {
+                flex-direction: column; 
+            }
+            #pantalla-tienda {
+                flex-direction: column;
+            }
+            main {
+                padding: 15px; 
+            }
+            aside.panel-pedido { 
+                width: 100%; 
+                height: auto; 
+                position: relative; 
+                border-left: none;
+                border-top: 2px solid #e2e8f0; 
+                padding: 20px 15px;
+            }
+            .Carrito-elementos {
+                max-height: 300px; 
+                overflow-y: auto;
+                margin-bottom: 15px;
+            }
         }
 </style>
   
