@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Wings - Menú Digital</title>
-  <style>
-        /* --- ESTILOS BASE SPACE WINGS (Dark Mode Suave) --- */
+<style>
+        /* --- ESTILOS BASE SPACE WINGS (Tema Claro Elegante) --- */
         body { 
-            background-color: #0f172a; /* Gris pizarra profundo, más suave que el negro */
-            color: #f1f5f9; /* Blanco titanio suave */
+            background-color: #f3f4f6; /* Fondo gris lino muy suave, evita el resplandor del blanco puro */
+            color: #334155; /* Texto gris pizarra oscuro en lugar de negro para una lectura orgánica */
             font-family: 'Arial', sans-serif; 
             margin: 0; 
             display: flex; 
@@ -24,7 +24,7 @@
             box-sizing: border-box; 
         }
         h1.logo { 
-            color: #e2b87f; /* Tono oro champán refinado y elegante */
+            color: #c27d38; /* Tono café canela cálido y distinguido */
             font-size: 2.2rem; 
             text-transform: uppercase; 
             text-align: center; 
@@ -32,8 +32,8 @@
             font-weight: 900; 
         }
         h2.seccion-titulo { 
-            color: #e2b87f; /* Oro champán */
-            border-bottom: 2px solid #e2b87f; 
+            color: #c27d38; /* Café canela */
+            border-bottom: 2px solid #c27d38; 
             padding-bottom: 6px; 
             margin-top: 25px; 
             text-transform: uppercase; 
@@ -46,17 +46,18 @@
             margin-top: 15px; 
         }
         .tarjeta-producto { 
-            background-color: #1e293b; /* Gris azulado oscuro texturizado */
-            border: 1px solid #334155; /* Borde sutil acoplado */
+            background-color: #ffffff; /* Tarjetas blancas limpias que resaltan del fondo */
+            border: 1px solid #e2e8f0; /* Borde sutil y minimalista */
             border-radius: 10px; 
             padding: 15px; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); /* Sombra tenue para dar profundidad */
         }
         .tag-categoria { 
-            background-color: #334155; /* Fondo neutral */
-            color: #e2b87f; /* Texto oro champán */
+            background-color: #f1f5f9; /* Fondo gris muy suave */
+            color: #c27d38; /* Texto en color acento */
             padding: 3px 6px; 
             border-radius: 4px; 
             font-size: 0.7rem; 
@@ -66,20 +67,21 @@
         }
         .precio { 
             font-size: 1.1rem; 
-            color: #e2b87f; /* Precios integrados al tono principal */
+            color: #c27d38; 
             font-weight: bold; 
             margin: 6px 0; 
         }
 
         /* --- CONFIGURADOR DE COMBOS --- */
         .tarjeta-combo-full {
-            background-color: #1e293b;
-            border: 1px solid #334155;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 10px;
             padding: 18px;
             margin-top: 15px;
             width: 100%;
             box-sizing: border-box;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
         }
         .header-combo {
             display: flex;
@@ -90,17 +92,17 @@
         .header-combo h3 {
             margin: 0;
             font-size: 1.2rem;
-            color: #f1f5f9;
+            color: #334155;
             font-weight: bold;
         }
         .header-combo .precio-combo {
-            color: #e2b87f;
+            color: #c27d38;
             font-size: 1.3rem;
             font-weight: bold;
         }
         .config-box {
-            background-color: #0f172a;
-            border: 1px solid #1e293b;
+            background-color: #f8fafc; /* Contenedor interno ligeramente más claro */
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
             padding: 12px;
             margin-bottom: 12px;
@@ -110,7 +112,7 @@
         }
         .campo-grupo label {
             display: block;
-            color: #94a3b8; /* Gris tenue para las etiquetas secundarias */
+            color: #64748b; /* Gris medio legible */
             font-size: 0.7rem;
             font-weight: bold;
             text-transform: uppercase;
@@ -118,17 +120,17 @@
         }
         select { 
             width: 100%; 
-            background-color: #1e293b; 
-            color: #f1f5f9; 
-            border: 1px solid #475569; 
+            background-color: #ffffff; 
+            color: #334155; 
+            border: 1px solid #cbd5e1; 
             padding: 8px; 
             border-radius: 6px; 
             font-size: 0.8rem;
             box-sizing: border-box;
         }
         .btn-agregar-combo {
-            background-color: #e2b87f; /* Fondo champán elegante */
-            color: #0f172a; /* Texto oscuro contrastante */
+            background-color: #475569; /* Gris piedra oscuro para los botones principales */
+            color: #ffffff; 
             border: none;
             padding: 10px 20px;
             border-radius: 6px;
@@ -137,10 +139,14 @@
             float: right;
             font-size: 0.85rem;
             text-transform: uppercase;
+            transition: background-color 0.2s;
+        }
+        .btn-agregar-combo:hover {
+            background-color: #334155;
         }
         .btn-agregar-individual {
-            background-color: #e2b87f;
-            color: #0f172a;
+            background-color: #475569;
+            color: #ffffff;
             border: none;
             padding: 8px;
             border-radius: 6px;
@@ -150,13 +156,17 @@
             margin-top: 10px;
             text-transform: uppercase;
             font-size: 0.8rem;
+            transition: background-color 0.2s;
+        }
+        .btn-agregar-individual:hover {
+            background-color: #334155;
         }
 
         /* --- INTERFAZ LATERAL FIJA (ESCRITORIO) --- */
         aside.panel-pedido { 
             width: 320px; 
-            background-color: #1e293b; 
-            border-left: 1px solid #334155; 
+            background-color: #ffffff; 
+            border-left: 1px solid #e2e8f0; 
             padding: 15px; 
             position: sticky; 
             top: 0; 
@@ -165,22 +175,24 @@
             display: flex;
             flex-direction: column;
             z-index: 100;
+            box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.02);
         }
         .cabecera-pedido { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            border-bottom: 1px solid #334155; 
+            border-bottom: 1px solid #e2e8f0; 
             padding-bottom: 10px; 
         }
         .cabecera-pedido h2 {
             margin: 0;
             font-size: 1.2rem;
             font-weight: bold;
+            color: #334155;
         }
         .contador-badge { 
-            background-color: #e2b87f; 
-            color: #0f172a; 
+            background-color: #c27d38; 
+            color: #ffffff; 
             border-radius: 50%; 
             width: 22px; 
             height: 22px; 
@@ -192,7 +204,7 @@
         }
         .label-cliente {
             display: block; 
-            color: #94a3b8; 
+            color: #64748b; 
             margin-bottom: 4px; 
             font-size: 0.7rem; 
             font-weight: bold; 
@@ -202,11 +214,15 @@
             width: 100%; 
             padding: 8px; 
             border-radius: 6px; 
-            border: 1px solid #475569; 
-            background-color: #0f172a; 
-            color: #f1f5f9; 
+            border: 1px solid #cbd5e1; 
+            background-color: #f8fafc; 
+            color: #334155; 
             box-sizing: border-box; 
             font-size: 0.85rem; 
+        }
+        .input-nombre:focus {
+            outline: none;
+            border-color: #c27d38;
         }
         .Carrito-elementos { 
             flex: 1; 
@@ -215,11 +231,11 @@
         }
         /* --- FILA DEL ARTÍCULO COMPACTO --- */
         .item-carrito-fila { 
-            background-color: #0f172a; 
+            background-color: #f8fafc; 
             padding: 8px 10px; 
             border-radius: 6px; 
             margin-bottom: 8px; 
-            border: 1px solid #334155; 
+            border: 1px solid #e2e8f0; 
         }
         .item-encabezado-flex {
             display: flex;
@@ -230,24 +246,24 @@
             margin: 0;
             font-weight: bold;
             font-size: 0.85rem;
-            color: #f1f5f9;
+            color: #334155;
         }
         .item-salsa-carrito {
             margin: 1px 0 0 0;
-            color: #e2b87f;
+            color: #c27d38;
             font-size: 0.75rem;
             font-style: italic;
         }
         .item-desc-carrito {
             margin: 2px 0 0 0;
-            color: #94a3b8;
+            color: #64748b;
             font-size: 0.7rem;
             font-style: italic;
             line-height: 1.1;
         }
         .item-precio-carrito {
             font-weight: bold;
-            color: #e2b87f;
+            color: #c27d38;
             font-size: 0.85rem;
             margin: 2px 0 0 0;
         }
@@ -259,13 +275,13 @@
         .item-botones-qty { 
             display: flex; 
             align-items: center; 
-            background-color: #334155;
+            background-color: #e2e8f0;
             border-radius: 4px;
             padding: 1px;
         }
         .item-botones-qty button { 
             background: none;
-            color: #f1f5f9; 
+            color: #334155; 
             border: none; 
             width: 18px; 
             height: 18px; 
@@ -274,6 +290,7 @@
             font-size: 0.8rem;
         }
         .item-botones-qty span {
+            color: #334155;
             font-size: 0.8rem;
             font-weight: bold;
             padding: 0 4px;
@@ -281,7 +298,7 @@
         .btn-cancelar {
             background: none;
             border: none;
-            color: #f87171; /* Rojo más suave y elegante para eliminar */
+            color: #ef4444; /* Rojo suave para la acción de eliminar */
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
@@ -289,7 +306,7 @@
             display: flex;
         }
 </style>
-
+  
 </head>
 <body>
 
