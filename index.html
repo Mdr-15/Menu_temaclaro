@@ -5,286 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Wings - Menú Digital</title>
    <style>
-    /* VARIABLES DE COLOR - PALETA SUAVE Y RELAJANTE */
-    :root {
-        --bg-pantalla: #F3F4F6;      /* Gris lino claro para descansar la vista */
-        --bg-tarjeta: #FFFFFF;       /* Blanco puro para los contenedores */
-        --bg-desplegable: #F8FAFC;   /* Fondo sutil para campos interactivos */
-        --texto-principal: #334155;  /* Gris pizarra oscuro (suave para lectura) */
-        --texto-secundario: #64748B; /* Gris medio para etiquetas de categorías */
-        --color-acento: #C27D38;     /* Tono café canela suave para títulos y precios */
-        --color-boton: #475569;      /* Gris piedra para botones de acción */
-        --color-exito: #4D7C0F;      /* Verde oliva suave para el botón enviar */
-        --borde-sutil: #E2E8F0;      /* Líneas divisorias tenues */
-        --fuente: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
     body {
-        background-color: var(--bg-pantalla);
-        color: var(--texto-principal);
-        font-family: var(--fuente);
-        padding: 30px 20px;
-        line-height: 1.5;
+        font-family: 'Arial', sans-serif;
+        background-color: #F3F4F6; /* Fondo gris claro relajante */
+        color: #334155; /* Texto gris pizarra oscuro en lugar de negro */
+        margin: 0;
+        padding: 20px;
     }
 
     h1 {
         text-align: center;
-        color: var(--color-acento);
-        font-size: 2.4rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 40px;
+        color: #C27D38; /* Tono canela suave para el título de la marca */
     }
 
-    /* CONTENEDOR PRINCIPAL (DOS COLUMNAS) */
     .contenedor {
-        display: grid;
-        grid-template-columns: 1fr 340px;
-        gap: 30px;
-        max-width: 1400px;
-        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
     }
 
     h2 {
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--texto-secundario);
-        border-bottom: 2px solid var(--borde-sutil);
-        padding-bottom: 8px;
-        margin-bottom: 25px;
-        margin-top: 20px;
+        color: #64748B; /* Gris medio para los títulos de secciones */
+        border-bottom: 2px solid #E2E8F0;
+        padding-bottom: 10px;
     }
 
-    /* GRID DE PLATILLOS */
     #platillos {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 20px;
-    }
-
-    /* TARJETAS DE PRODUCTOS */
-    .platillo {
-        background-color: var(--bg-tarjeta);
-        border: 1px solid var(--borde-sutil);
-        border-radius: 14px;
-        padding: 22px;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 70%;
     }
 
-    .platillo:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    .platillo {
+        background-color: #FFFFFF; /* Tarjetas blancas limpias */
+        border: 1px solid #E2E8F0; /* Borde sutil en vez de naranja */
+        border-radius: 8px;
+        padding: 15px;
+        width: 200px;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .platillo h3 {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--texto-principal);
-        margin-bottom: 5px;
+        margin: 0 0 10px 0;
+        color: #334155;
     }
 
     .platillo p {
-        color: var(--color-acento);
-        font-weight: 600;
-        font-size: 1.15rem;
-        margin-bottom: 15px;
+        font-weight: bold;
+        color: #C27D38; /* Precios en tono canela suave */
     }
 
-    /* SELECTORES DESPLEGABLES */
     select {
+        margin-bottom: 10px;
         width: 100%;
-        background-color: var(--bg-desplegable);
-        color: var(--texto-principal);
-        border: 1px solid var(--borde-sutil);
-        padding: 11px;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        margin-bottom: 12px;
-        outline: none;
-        cursor: pointer;
-        transition: border-color 0.2s;
+        padding: 5px;
+        background-color: #F8FAFC; /* Fondo sutil para selectores */
+        color: #334155;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
     }
 
-    select:focus {
-        border-color: var(--color-acento);
-    }
-
-    /* BOTONES AGREGAR */
     button {
-        background-color: var(--color-boton);
-        color: #FFFFFF;
+        background-color: #475569; /* Botones en gris piedra elegante */
+        color: white;
         border: none;
-        padding: 11px;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
+        padding: 10px;
+        border-radius: 5px;
         cursor: pointer;
         width: 100%;
-        text-transform: uppercase;
-        transition: background-color 0.2s;
     }
 
     button:hover {
-        background-color: #334155;
+        background-color: #334155; /* Oscurecimiento sutil al pasar el cursor */
     }
 
-    /* SECCIÓN DE COMBOS */
     #combos {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+        width: 70%;
+        margin-top: 20px;
     }
 
     .combo {
-        background-color: var(--bg-tarjeta);
-        border: 1px solid var(--borde-sutil);
-        border-radius: 14px;
-        padding: 25px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        background-color: #FFFFFF; /* Fondo blanco para combos */
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .combo h3 {
-        font-size: 1.3rem;
-        font-weight: 600;
-        margin-bottom: 5px;
+        margin: 0;
+        color: #334155;
     }
 
     .combo p {
-        color: var(--color-acento);
-        font-weight: 600;
-        font-size: 1.2rem;
-        margin-bottom: 15px;
-    }
-
-    /* BARRA LATERAL DEL PEDIDO (CARRITO) */
-    .pedido {
-        background-color: var(--bg-tarjeta);
-        border: 1px solid var(--borde-sutil);
-        border-radius: 14px;
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        height: fit-content;
-        position: sticky;
-        top: 30px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-    }
-
-    .pedido h2 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 20px;
-        border: none;
-        padding: 0;
-        color: var(--texto-principal);
-    }
-
-    #nombre {
-        width: 100%;
-        padding: 12px;
-        background-color: var(--bg-desplegable);
-        border: 1px solid var(--borde-sutil);
-        border-radius: 8px;
-        color: var(--texto-principal);
-        font-size: 0.9rem;
-        outline: none;
-        margin-bottom: 20px;
-        transition: border-color 0.2s;
-    }
-
-    #nombre:focus {
-        border-color: var(--color-acento);
-    }
-
-    #carrito p {
-        color: var(--texto-secundario);
-        font-size: 0.9rem;
-        text-align: center;
-        margin: 30px 0;
-    }
-
-    /* ELEMENTOS DENTRO DEL CARRITO (GENERADOS POR JS) */
-    .platillo-en-carrito {
-        padding: 10px 0;
-        border-bottom: 1px dashed var(--borde-sutil);
-        font-size: 0.95rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .btn-eliminar {
-        background: none !important;
-        border: none !important;
-        color: #EF4444 !important;
-        cursor: pointer;
         font-weight: bold;
-        width: auto !important;
-        padding: 0 5px !important;
+        color: #C27D38;
     }
 
-    /* FOOTER DEL PEDIDO */
-    .pedido p:last-of-type {
-        border-top: 1px solid var(--borde-sutil);
-        padding-top: 20px;
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--texto-principal);
-    }
-
-    /* BOTÓN ENVIAR PEDIDO */
-    #enviar {
-        background-color: var(--color-exito);
-        color: #FFFFFF;
-        margin-top: 15px;
-        padding: 14px;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 8px;
-    }
-
-    #enviar:hover {
-        opacity: 0.9;
-    }
-
-    /* CONFIGURADOR DE COMBOS */
     .config-combo {
-        background-color: transparent;
-        color: var(--color-acento);
-        border: 1px dashed var(--color-acento);
-        padding: 8px 14px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin-bottom: 20px;
-        display: inline-block;
+        background-color: #64748B; /* Botón de configuración en gris intermedio */
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-bottom: 10px;
         width: auto;
     }
 
-    /* RESPONSIVO PARA PANTALLAS MÓVILES */
-    @media (max-width: 900px) {
-        .contenedor {
-            grid-template-columns: 1fr;
-        }
-        body {
-            padding: 15px 10px;
-        }
+    .pedido {
+        width: 25%;
+        background-color: #FFFFFF; /* Carrito en fondo blanco */
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        padding: 15px;
+        height: fit-content;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .pedido h2 {
+        margin-top: 0;
+        color: #334155;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    #nombre {
+        width: 90%;
+        padding: 8px;
+        margin-bottom: 10px;
+        background-color: #F8FAFC;
+        border: 1px solid #CBD5E1;
+        color: #334155;
+        border-radius: 4px;
+    }
+
+    #enviar {
+        background-color: #4D7C0F; /* Verde oliva/salvia suave para el envío final */
+        color: white;
+        margin-top: 10px;
+    }
+
+    #enviar:hover {
+        background-color: #3F620E;
     }
 </style>
 
