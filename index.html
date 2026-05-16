@@ -602,7 +602,10 @@ async function cargarMenuCompleto() {
     }
 }
 
-
+        function limpiarTextoSheets(celda) {
+            if (!celda) return '';
+            return celda.trim().replace(/^"|"$/g, '').trim();
+}
         
         // === MOTOR DE PARSEO CORREGIDO CON INDEXACIÓN ESTRICTA ===
         function parsearEstructuraMenu(texto) {
