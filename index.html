@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Wings - Menú Digital</title>
-<style>
-        /* --- ESTILOS BASE SPACE WINGS (Tema Claro Elegante) --- */
+        
+    <style>
+     /* --- ESTILOS BASE SPACE WINGS (Tema Claro Elegante Premium) --- */
         body { 
-            background-color: #f3f4f6; /* Fondo gris lino muy suave, evita el resplandor del blanco puro */
-            color: #334155; /* Texto gris pizarra oscuro para una lectura orgánica */
-            font-family: 'Arial', sans-serif; 
+            background-color: #f8fafc; /* Fondo pizarra claro, ultra limpio y moderno */
+            color: #334155; 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
             display: flex; 
             min-height: 100vh; 
@@ -20,154 +21,210 @@
         }
         main { 
             flex: 1; 
-            padding: 30px; 
+            padding: 40px; 
             box-sizing: border-box; 
+            max-width: 1200px;
+            margin: 0 auto;
         }
         h1.logo { 
             color: #c27d38; /* Tono café canela cálido y distinguido */
-            font-size: 2.2rem; 
+            font-size: 2.6rem; 
             text-transform: uppercase; 
             text-align: center; 
-            margin-bottom: 25px; 
+            margin-bottom: 35px; 
             font-weight: 900; 
+            letter-spacing: 2px;
         }
         h2.seccion-titulo { 
-            color: #c27d38; /* Café canela */
-            border-bottom: 2px solid #c27d38; 
-            padding-bottom: 6px; 
-            margin-top: 25px; 
+            color: #c27d38; 
+            border-bottom: 2px solid #e2e8f0; 
+            padding-bottom: 10px; 
+            margin-top: 40px; 
             text-transform: uppercase; 
-            font-size: 1.2rem; 
+            font-size: 1.3rem; 
+            letter-spacing: 1px;
+            position: relative;
+        }
+        h2.seccion-titulo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: #c27d38;
         }
         .grid-productos { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
-            gap: 15px; 
-            margin-top: 15px; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 24px; 
+            margin-top: 20px; 
         }
+        
+        /* --- TARJETAS DE PRODUCTOS --- */
         .tarjeta-producto { 
-            background-color: #ffffff; /* Tarjetas blancas limpias */
-            border: 1px solid #e2e8f0; /* Borde sutil y minimalista */
-            border-radius: 10px; 
-            padding: 15px; 
+            background-color: #ffffff; 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+            border-radius: 16px; /* Bordes más suaves y curvos */
+            padding: 24px; 
             display: flex; 
             flex-direction: column; 
             justify-content: space-between;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03); 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01); 
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .tarjeta-producto:hover {
+            transform: translateY(-5px); /* Efecto de elevación interactiva */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            border-color: rgba(194, 125, 56, 0.3);
         }
         .tag-categoria { 
-            background-color: #f1f5f9; /* Fondo gris muy suave */
-            color: #c27d38; /* Texto en color acento */
-            padding: 3px 6px; 
-            border-radius: 4px; 
-            font-size: 0.7rem; 
-            font-weight: bold; 
-            margin-bottom: 6px; 
+            background-color: #fdf4eb; /* Fondo suave canela pálido */
+            color: #c27d38; 
+            padding: 4px 10px; 
+            border-radius: 20px; /* Estilo píldora moderno */
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
             display: inline-block;
+            align-self: flex-start;
+        }
+        .tarjeta-producto strong {
+            font-size: 1.2rem;
+            color: #1e293b;
+            font-weight: 700;
         }
         .precio { 
-            font-size: 1.1rem; 
+            font-size: 1.3rem; 
             color: #c27d38; 
-            font-weight: bold; 
-            margin: 6px 0; 
+            font-weight: 800; 
+            margin: 12px 0; 
         }
 
         /* --- CONFIGURADOR DE COMBOS --- */
         .tarjeta-combo-full {
             background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 18px;
-            margin-top: 15px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
             width: 100%;
             box-sizing: border-box;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: box-shadow 0.25s ease;
+        }
+        .tarjeta-combo-full:hover {
+            box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.04);
         }
         .header-combo {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         .header-combo h3 {
             margin: 0;
-            font-size: 1.2rem;
-            color: #334155;
-            font-weight: bold;
+            font-size: 1.3rem;
+            color: #1e293b;
+            font-weight: 700;
         }
         .header-combo .precio-combo {
             color: #c27d38;
-            font-size: 1.3rem;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 800;
         }
         .config-box {
             background-color: #f8fafc; 
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            
+            /* --- CONFIGURACIÓN VERTICAL CONGELADA --- */
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px; /* Espaciado uniforme entre cada renglón */
+        }      
         .campo-grupo {
-            margin-bottom: 12px;
+            margin-bottom: 0;
         }
         .campo-grupo label {
             display: block;
             color: #64748b; 
-            font-size: 0.7rem;
-            font-weight: bold;
+            font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
         select { 
             width: 100%; 
             background-color: #ffffff; 
             color: #334155; 
             border: 1px solid #cbd5e1; 
-            padding: 8px; 
-            border-radius: 6px; 
-            font-size: 0.8rem;
+            padding: 10px; 
+            border-radius: 8px; 
+            font-size: 0.85rem;
             box-sizing: border-box;
+            cursor: pointer;
+            transition: border-color 0.2s;
         }
-        .btn-agregar-combo {
-            background-color: #475569; 
+        select:focus {
+            outline: none;
+            border-color: #c27d38;
+        }
+        
+        /* --- BOTONES MODERNOS --- */
+         .btn-agregar-combo {
+            background-color: #475569; /* Gris oscuro original */
             color: #ffffff; 
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
-            float: right;
             font-size: 0.85rem;
             text-transform: uppercase;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
+            
+            /* --- ALINEACIÓN SEGURA DENTRO DE LA TARJETA --- */
+            float: right !important; /* Mantiene la posición a la derecha */
+            margin-top: 5px !important;
+            margin-bottom: 15px !important; /* Espacio extra abajo para que respire la tarjeta */
         }
         .btn-agregar-combo:hover {
-            background-color: #334155;
+            background-color: #a8682a;
+        }
+        .btn-agregar-combo:active {
+            transform: scale(0.98);
         }
         .btn-agregar-individual {
             background-color: #475569;
             color: #ffffff;
             border: none;
-            padding: 8px;
-            border-radius: 6px;
-            font-weight: bold;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
             text-transform: uppercase;
             font-size: 0.8rem;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
         }
         .btn-agregar-individual:hover {
             background-color: #334155;
         }
+        .btn-agregar-individual:active {
+            transform: scale(0.98);
+        }
 
-        /* --- INTERFAZ LATERAL FIJA (ESCRITORIO Y ADAPTADO A MÓVIL) --- */
+        /* --- INTERFAZ LATERAL FIJA DEL PEDIDO --- */
         aside.panel-pedido { 
-            width: 320px; 
+            width: 360px; 
             background-color: #ffffff; 
             border-left: 1px solid #e2e8f0; 
-            padding: 15px; 
+            padding: 24px; 
             position: sticky; 
             top: 0; 
             height: 100vh; 
@@ -175,66 +232,69 @@
             display: flex;
             flex-direction: column;
             z-index: 100;
-            box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.02);
+            box-shadow: -10px 0 15px -3px rgba(0, 0, 0, 0.02);
         }
         .cabecera-pedido { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            border-bottom: 1px solid #e2e8f0; 
-            padding-bottom: 10px; 
+            border-bottom: 2px solid #f1f5f9; 
+            padding-bottom: 16px; 
+            margin-bottom: 20px;
         }
         .cabecera-pedido h2 {
             margin: 0;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #334155;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e293b;
         }
         .contador-badge { 
             background-color: #c27d38; 
             color: #ffffff; 
             border-radius: 50%; 
-            width: 22px; 
-            height: 22px; 
+            width: 26px; 
+            height: 26px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             font-weight: bold; 
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
         .label-cliente {
             display: block; 
             color: #64748b; 
-            margin-bottom: 4px; 
-            font-size: 0.7rem; 
-            font-weight: bold; 
+            margin-bottom: 6px; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .input-nombre { 
             width: 100%; 
-            padding: 8px; 
-            border-radius: 6px; 
+            padding: 12px; 
+            border-radius: 8px; 
             border: 1px solid #cbd5e1; 
             background-color: #f8fafc; 
             color: #334155; 
             box-sizing: border-box; 
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
+            transition: border-color 0.2s, background-color 0.2s;
         }
         .input-nombre:focus {
             outline: none;
             border-color: #c27d38;
+            background-color: #ffffff;
         }
         .Carrito-elementos { 
             flex: 1; 
             overflow-y: auto; 
-            margin-top: 10px; 
+            margin-top: 16px; 
         }
-        /* --- FILA DEL ARTÍCULO COMPACTO --- */
         .item-carrito-fila { 
             background-color: #f8fafc; 
-            padding: 8px 10px; 
-            border-radius: 6px; 
-            margin-bottom: 8px; 
+            padding: 12px; 
+            border-radius: 8px; 
+            margin-bottom: 10px; 
             border: 1px solid #e2e8f0; 
         }
         .item-encabezado-flex {
@@ -244,148 +304,228 @@
         }
         .item-titulo-carrito {
             margin: 0;
-            font-weight: bold;
-            font-size: 0.85rem;
-            color: #334155;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1e293b;
         }
         .item-salsa-carrito {
-            margin: 1px 0 0 0;
+            margin: 4px 0 0 0;
             color: #c27d38;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-style: italic;
         }
         .item-desc-carrito {
-            margin: 2px 0 0 0;
+            margin: 4px 0 0 0;
             color: #64748b;
-            font-size: 0.7rem;
-            font-style: italic;
-            line-height: 1.1;
+            font-size: 0.75rem;
+            line-height: 1.3;
         }
         .item-precio-carrito {
-            font-weight: bold;
+            font-weight: 700;
             color: #c27d38;
-            font-size: 0.85rem;
-            margin: 2px 0 0 0;
+            font-size: 0.9rem;
+            margin: 4px 0 0 0;
         }
+        /* --- CONTROLES DE CANTIDAD Y CANCELACIÓN EN EL CARRITO --- */
         .controles-contenedor {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            margin-top: 10px;
         }
         .item-botones-qty { 
             display: flex; 
             align-items: center; 
-            background-color: #e2e8f0;
-            border-radius: 4px;
-            padding: 1px;
+            background-color: #f1f5f9; /* Gris sutil moderno */
+            border-radius: 8px; /* Redondeado consistente */
+            padding: 3px;
+            border: 1px solid #e2e8f0;
         }
         .item-botones-qty button { 
-            background: none;
+            background: #ffffff;
             color: #334155; 
-            border: none; 
-            width: 18px; 
-            height: 18px; 
+            border: 1px solid #e2e8f0; 
+            width: 24px; 
+            height: 24px; 
+            border-radius: 6px;
             cursor: pointer; 
             font-weight: bold; 
-            font-size: 0.8rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all 0.15s ease;
+        }
+        .item-botones-qty button:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+            color: #c27d38; /* Cambio al color de tu marca */
+        }
+        .item-botones-qty button:active {
+            transform: scale(0.92);
         }
         .item-botones-qty span {
-            color: #334155;
-            font-size: 0.8rem;
-            font-weight: bold;
-            padding: 0 4px;
+            color: #1e293b;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0 10px;
+            min-width: 14px;
+            text-align: center;
         }
         .btn-cancelar {
-            background: none;
-            border: none;
+            background: #fef2f2; /* Fondo rojo ultra suave */
+            border: 1px solid #fee2e2;
             color: #ef4444; 
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            padding: 0;
+            padding: 5px 8px;
+            border-radius: 6px;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+        .btn-cancelar:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            transform: translateY(-1px);
+        }
+        .btn-cancelar:active {
+            transform: translateY(0);
         }
 
-        /* --- DISEÑO RESPONSIVO: CARRITO FLOTANTE MINIMIZABLE EN CELULAR --- */
+            /* --- DISEÑO RESPONSIVO: CARRITO FLOTANTE MINIMIZABLE EN CELULAR --- */
         @media (max-width: 990px) { 
             body { 
-                flex-direction: column; 
+                flex-direction: column !important; 
             } 
             #pantalla-tienda { 
-                flex-direction: column; 
+                flex-direction: column !important; 
             }
             main {
-                padding: 15px;
-                padding-top: 70px; /* 🚀 SOLUCIÓN: Empuja el nombre de Space Wings hacia abajo en celulares */
-                padding-bottom: 90px; /* Espacio inferior seguro para la barra flotante */
+                padding: 15px !important;
+                padding-top: 30px !important; /* Ajustado para balancear el espacio superior */
+                padding-bottom: 90px !important; /* Espacio inferior seguro para la barra flotante */
             }
             
-            /* El panel lateral se convierte en una barra colapsable */
+            /* El panel lateral se convierte en una barra colapsable adaptada a tu paleta clara */
             aside.panel-pedido { 
-                width: 100%; 
-                height: auto;
-                max-height: 60px; /* Altura compacta por defecto: NO tapa tus artículos */
-                position: fixed; 
-                bottom: 0; 
-                left: 0;
-                right: 0;
-                border-left: none; 
-                border-top: 2px solid #ff9f00; 
-                background-color: #161a1f;
-                padding: 10px 15px;
-                box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.7); 
-                border-radius: 16px 16px 0 0; 
-                overflow: hidden;
-                transition: max-height 0.4s ease-in-out; /* Animación suave al abrir/cerrar */
-                z-index: 9999;
+                width: 100% !important; 
+                height: auto !important;
+                max-height: 65px; /* Altura compacta por defecto */
+                position: fixed !important; 
+                bottom: 0 !important; 
+                left: 0 !important;
+                right: 0 !important;
+                border-left: none !important; 
+                border-top: 3px solid #c27d38; /* Color café canela de tu marca */
+                background-color: #ffffff !important; /* Mantiene la estética premium clara */
+                padding: 12px 20px !important;
+                box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08) !important; 
+                border-radius: 20px 20px 0 0 !important; 
+                overflow: hidden !important;
+                transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important; /* Animación más fluida */
+                z-index: 9999 !important;
             } 
             
-            /* Clase dinámica que se activará desde JS para expandir el carrito completo */
+            /* Clase dinámica que activa el JavaScript al hacer clic */
             aside.panel-pedido.expandido {
-                max-height: 80vh; /* Se abre hacia arriba cubriendo el 80% de la pantalla de forma controlada */
-                overflow-y: auto;
+                max-height: 80vh !important; 
+                overflow-y: auto !important;
             }
 
-            /* Forzamos que la cabecera del pedido actúe como un botón táctil */
+            /* Forzamos que la cabecera del pedido actúe como un gran botón táctil alineado */
             .cabecera-pedido {
-                cursor: pointer;
-                padding-bottom: 5px;
+                cursor: pointer !important;
+                padding-bottom: 5px !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                width: 100% !important;
             }
 
             .Carrito-elementos {
-                max-height: 250px; 
-                margin-top: 10px;
+                max-height: 350px !important; 
+                margin-top: 15px !important;
             }
             
-            /* Ocultamos el campo del cliente si el carrito está cerrado para ahorrar espacio */
-            aside.panel-pedido:not(.expandido) .Cliente,
+            /* Ocultamos los bloques internos si el carrito está cerrado */
+            aside.panel-pedido:not(.expandido) .label-cliente,
+            aside.panel-pedido:not(.expandido) .input-nombre,
             aside.panel-pedido:not(.expandido) .Carrito-elementos,
-            aside.panel-pedido:not(.expandido) .Boton-enviar {
+            aside.panel-pedido:not(.expandido) .Boton-enviar,
+            aside.panel-pedido:not(.expandido) .item-carrito-fila {
                 display: none !important;
             }
             
-            /* Rediseño de la barra delgada inferior cuando está colapsado */
-            aside.panel-pedido:not(.expandido) .Total {
-                border-top: none;
-                margin-top: 0;
-                padding-top: 0;
-                display: inline-flex;
-                float: left;
-                font-size: 1rem;
-                line-height: 24px;
+            /* Corrección del Total: Se alinea limpio a la derecha de la cabecera cuando está cerrado */
+            aside.panel-pedido:not(.expandido) .precio-total,
+            aside.panel-pedido:not(.expandido) [id*="total"] {
+                font-size: 1.1rem !important;
+                font-weight: 800 !important;
+                color: #c27d38 !important;
             }
             
-            /* Añadimos una flecha indicadora o texto de apoyo visual en móviles */
+            /* Indicadores visuales interactivos usando tu color de acento */
             .cabecera-pedido::after {
-                content: ' 🔼 Ver Carrito';
-                color: #ff9f00;
-                font-size: 0.8rem;
+                content: '🔼 Ver pedido';
+                color: #c27d38;
+                font-size: 0.85rem;
                 font-weight: bold;
+                background-color: #fdf4eb;
+                padding: 6px 12px;
+                border-radius: 20px;
+                transition: all 0.2s;
             }
             aside.panel-pedido.expandido .cabecera-pedido::after {
-                content: ' 🔽 Ocultar';
+                content: '🔽 Ocultar';
+                background-color: #f1f5f9;
+                color: #64748b;
             }
         }
+
+    
+            /* --- DISEÑO DE ALTA GAMA PARA EL BOTÓN IMPRIMIR --- */
+        aside.panel-pedido button:not(.item-botones-qty button):not(.btn-cancelar) {
+            background-color: #475569 !important; /* Gris oscuro elegante */
+            color: #ffffff !important;
+            border: none !important;
+            padding: 14px 20px !important;
+            border-radius: 10px !important;
+            font-size: 0.95rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer !important;
+            width: 100% !important;
+            margin-top: 20px !important;
+            box-shadow: 0 4px 6px -1px rgba(71, 85, 105, 0.2) !important;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s !important;
+            display: block !important;
+        }
+
+        aside.panel-pedido button:not(.item-botones-qty button):not(.btn-cancelar):hover {
+            background-color: #334155 !important; /* Más oscuro al pasar el mouse */
+            box-shadow: 0 10px 15px -3px rgba(71, 85, 105, 0.3) !important;
+        }
+
+        aside.panel-pedido button:not(.item-botones-qty button):not(.btn-cancelar):active {
+            transform: scale(0.98) !important; /* Efecto físico al presionarlo */
+        }
+
+        /* Estilo complementario para limpiar el texto del Total */
+        aside.panel-pedido div:has(> button), 
+        aside.panel-pedido p:has(button),
+        aside.panel-pedido .Total {
+            font-size: 1.1rem !important;
+            font-weight: 800 !important;
+            color: #1e293b !important;
+            margin-top: 15px !important;
+        }
+
+    
     </style>
   
 </head>
