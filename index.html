@@ -564,30 +564,46 @@
     </div>
 
     <script>
-        const urlGoogleSheets = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5rO4smgDCoyQggGHUfR40G1zudA8tf_Tcwnvl4KPRoyhRVq0jlaUfY3DCQBA_M2Bcxyja7SaPzAz7/pub?gid=0&single=true&output=csv"; 
+        
 
-         
-        let baseDatosProductos = { individuales: [], combos: [] };
-        let carrito = [];
+        //***** OBTENER LOS DATOS DEL ARCHIVO DE GOOGLE SHEETS
+        
+const servidorGoogle = "https://docs.google.com/spreadsheets/d/";
+const idDocumento = "18DrAD8PX7jpvMoW9N8sKTlqXY4SiprjdmDMBKnfi8gQ";
+const endpointApi = "/gviz/tq?tqx=out:csv&sheet=Hoja1";
 
-        async function cargarMenuCompleto() {
-            try {
-                const respuesta = await fetch(urlGoogleSheets);
-                const textoCSV = await respuesta.text();
-                baseDatosProductos = parsearEstructuraMenu(textoCSV);
-                renderizarArticulosIndividuales(baseDatosProductos.individuales);
-                renderizarCombosDinamicos(baseDatosProductos.combos);
-                actualizarInterfazCarrito();
-            } catch (error) {
-                console.error("Fallo al inicializar base de datos:", error);
+const urlGoogleSheets = servidorGoogle + idDocumento + endpointApi;
+
+let baseDatosProductos = { individuales: [], combos: [] };
+let carrito = [];
+
+async function cargarMenuCompleto() {
+    try {
+        // Rompemos la caché de Google agregando la hora actual exacta
+        const urlFinal = urlGoogleSheets + "&t=" + new Date().getTime();
+
+        const respuesta = await fetch(urlFinal, { 
+            cache: "no-store",
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
             }
-        }
+        });
 
-        function limpiarTextoSheets(celda) {
-            if (!celda) return '';
-            return celda.trim().replace(/^"|"$/g, '').trim();
-        }
+        const textoCSV = await respuesta.text();
+        baseDatosProductos = parsearEstructuraMenu(textoCSV);
+        
+        renderizarArticulosIndividuales(baseDatosProductos.individuales);
+        renderizarCombosDinamicos(baseDatosProductos.combos);
+        actualizarInterfazCarrito();
+        console.log("⚡ Menú en vivo actualizado con éxito.");
+    } catch (error) {
+        console.error("Fallo al inicializar base de datos:", error);
+    }
+}
 
+
+        
         // === MOTOR DE PARSEO CORREGIDO CON INDEXACIÓN ESTRICTA ===
         function parsearEstructuraMenu(texto) {
             const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
