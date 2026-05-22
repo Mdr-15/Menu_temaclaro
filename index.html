@@ -607,81 +607,85 @@ async function cargarMenuCompleto() {
             return celda.trim().replace(/^"|"$/g, '').trim();
 }
         
-        // === MOTOR DE PARSEO CORREGIDO CON INDEXACIÓN ESTRICTA ===
-        function parsearEstructuraMenu(texto) {
-            const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            const individuales = [];
-            const combosAgrupados = {};
-            let leyendoCombos = false;
+       function parsearEstructuraMenu(texto) {
+    const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const individuales = [];
+    const combosAgrupados = {};
+    let leyendoCombos = false;
 
-            // Índices basados rigurosamente en tu captura de imagen real de Google Sheets
-            const idxId = 0;   // Columna A (Id_platillo)
-            const idxCat = 1;  // Columna B (Categoria)
-            const idxNom = 2;  // Columna C (Producto)
-            const idxPre = 3;  // Columna D (Precio)
-            const idxDisp = 4; // Columna E (Disponible)
-            const idxComboPaso = 5; // Columna F (Categoria de paso de combo)
-            const idxComboProd = 6; // Columna G (Producto interno de combo)
+    const idxId = 0;   // Columna A (Id_platillo)
+    const idxCat = 1;  // Columna B (Categoria)
+    const idxNom = 2;  // Columna C (Producto)
+    const idxPre = 3;  // Columna D (Precio)
+    const idxDisp = 4; // Columna E (Disponible)
+    const idxMed = 5;  // Columna F (NUEVA COLUMNA: Medias)
+    const idxComboPaso = 6; // Columna G (Categoria de paso de combo)
+    const idxComboProd = 7; // Columna H (Producto interno de combo)
 
-            for (let i = 0; i < lineas.length; i++) {
-                const linea = lineas[i];
-                const columnas = linea.split(',').map(limpiarTextoSheets);
+    for (let i = 0; i < lineas.length; i++) {
+        const linea = lineas[i];
+        const columnas = linea.split(',').map(limpiarTextoSheets);
 
-                if (!columnas || columnas[idxId] === 'Id_platillo' || columnas[idxId] === 'CONF') {
-                    if (i > 1 && columnas[idxId] === 'Id_platillo') {
-                        leyendoCombos = true;
-                    }
-                    continue;
-                }
-
-                const disponible = columnas[idxDisp] ? columnas[idxDisp].toLowerCase() === 'si' : false;
-                if (!disponible) continue;
-
-                // CORRECCIÓN CRÍTICA: Se evalúa el índice [0] del arreglo para evitar congelar el script
-                if (columnas[idxId].startsWith('P') && !leyendoCombos) {
-                    const producto = {
-                        id: columnas[idxId],
-                        categoria: columnas[idxCat],
-                        nombre: columnas[idxNom],
-                        precio: parseFloat(columnas[idxPre]) || 0,
-                        salsas: []
-                    };
-                    
-                    // Extraer salsas horizontales de la primera tabla
-                    for (let s = 5; s < columnas.length; s++) {
-                        if (columnas[s]) {
-                            producto.salsas.push(columnas[s]);
-                        }
-                    }
-                    individuales.push(producto);
-                } 
-                
-                // CORRECCIÓN CRÍTICA: Se evalúa el índice [0] para agrupar los combos multi-opción
-                if (columnas[idxId].startsWith('C')) {
-                    const comboId = columnas[idxId];
-                    const nombreCombo = columnas[idxNom]; 
-                    const precioCombo = parseFloat(columnas[idxPre]) || 0; 
-                    
-                    const componenteCategoria = columnas[idxComboPaso]; 
-                    const componenteProducto = columnas[idxComboProd];  
-                    
-                    const salsasComponente = [];
-                    // Las salsas de los combos inician en la columna H (índice 7) en adelante
-                    for (let s = 7; s < columnas.length; s++) {
-                        if (columnas[s]) salsasComponente.push(columnas[s]);
-                    }
-
-                    if (!combosAgrupados[comboId]) {
-                        combosAgrupados[comboId] = { id: comboId, nombre: nombreCombo, precio: precioCombo, secciones: {} };
-                    }
-                    if (!combosAgrupados[comboId].secciones[componenteCategoria]) {
-                        combosAgrupados[comboId].secciones[componenteCategoria] = [];
-                    }
-                    combosAgrupados[comboId].secciones[componenteCategoria].push({ nombre: componenteProducto, salsas: salsasComponente });
-                }
+        if (!columnas || columnas[idxId] === 'Id_platillo' || columnas[idxId] === 'CONF') {
+            if (i > 1 && columnas[idxId] === 'Id_platillo') {
+                leyendoCombos = true;
             }
-            return { individuales, combos: Object.values(combosAgrupados) };
+            continue;
         }
+
+        const disponible = columnas[idxDisp] ? columnas[idxDisp].toLowerCase() === 'si' : false;
+        if (!disponible) continue;
+
+        // Limpieza profunda de la columna F para evitar errores de formato de Sheets
+        const valorMediasRaw = columnas[idxMed] ? columnas[idxMed].trim().toUpperCase() : '';
+        const permiteMedias = valorMediasRaw === 'SI';
+
+        if (columnas[idxId].startsWith('P') && !leyendoCombos) {
+            const producto = {
+                id: columnas[idxId],
+                categoria: columnas[idxCat],
+                nombre: columnas[idxNom],
+                precio: parseFloat(columnas[idxPre]) || 0,
+                medias: permiteMedias, // Guarda true o false estrictos
+                salsas: []
+            };
+            
+            for (let s = 6; s < columnas.length; s++) {
+                if (columnas[s]) producto.salsas.push(columnas[s]);
+            }
+            individuales.push(producto);
+        } 
+        
+        if (columnas[idxId].startsWith('C')) {
+            const comboId = columnas[idxId];
+            const nombreCombo = columnas[idxNom]; 
+            const precioCombo = parseFloat(columnas[idxPre]) || 0; 
+            
+            const componenteCategoria = columnas[idxComboPaso]; 
+            const componenteProducto = columnas[idxComboProd];  
+            
+            const salsasComponente = [];
+            for (let s = 8; s < columnas.length; s++) {
+                if (columnas[s]) salsasComponente.push(columnas[s]);
+            }
+
+            if (!combosAgrupados[comboId]) {
+                combosAgrupados[comboId] = { 
+                    id: comboId, 
+                    nombre: nombreCombo, 
+                    precio: precioCombo, 
+                    medias: permiteMedias, // Asigna la regla al combo completo
+                    secciones: {} 
+                };
+            }
+            if (!combosAgrupados[comboId].secciones[componenteCategoria]) {
+                combosAgrupados[comboId].secciones[componenteCategoria] = [];
+            }
+            combosAgrupados[comboId].secciones[componenteCategoria].push({ nombre: componenteProducto, salsas: salsasComponente });
+        }
+    }
+    return { individuales, combos: Object.values(combosAgrupados) };
+}
 
         function renderizarArticulosIndividuales(productos) {
             const contenedor = document.getElementById('contenedor-individuales');
@@ -823,15 +827,15 @@ async function cargarMenuCompleto() {
         return;
     }
 
-    // ❌ SE ELIMINÓ: La validación 'itemExistente' que sumaba la cantidad.
-    //  AHORA: Inserta siempre una línea nueva e independiente.
     carrito.push({ 
         uid: Date.now() + Math.random(), 
         id: producto.id, 
         nombre: producto.nombre, 
         precio: producto.precio, 
         salsa: salsaSeleccionada, 
-        cantidad: 1, 
+        categoria: producto.categoria,
+        medias: producto.medias, // Traspasa el valor true/false del parseo
+        cantidad: 1,            // Inicia obligatoriamente en 1
         nota: "" 
     });
 
@@ -839,60 +843,84 @@ async function cargarMenuCompleto() {
     actualizarInterfazCarrito();
 }
 
-function agregarComboEstructuraNueva(comboId) {
-    const combo = baseDatosProductos.combos.find(c => c.id === comboId);
-    if (!combo) return;
-
-    let configuracionFinal = [];
-    let validacionCorrecta = true;
-
-    let index = 0;
-    for (const [nombreSeccion, opciones] of Object.entries(combo.secciones)) {
-        const prodSelect = document.getElementById(`combo-${comboId}-prod-${index}`);
-        const salsaSelect = document.getElementById(`combo-${comboId}-salsa-${index}`);
-
-        const nombreArticulo = prodSelect ? prodSelect.value : '';
-        const salsaArticulo = (salsaSelect && !salsaSelect.disabled) ? salsaSelect.value : '';
-
-        if (!nombreArticulo) { validacionCorrecta = false; break; }
-
-        if (salsaSelect && !salsaSelect.disabled && !salsaArticulo) {
-            alert(`Por favor elige la salsa para tu ${nombreSeccion.toLowerCase()}: ${nombreArticulo}`);
-            validacionCorrecta = false;
-            break;
-        }
-
-        configuracionFinal.push(`${nombreArticulo}${salsaArticulo ? ` (🌶️ ${salsaArticulo})` : ''}`);
-        index++;
-    }
-
-    if (!validacionCorrecta) return;
-
-    const descripcionCombo = `[${configuracionFinal.join(' + ')}]`;
-
-    // ❌ SE ELIMINÓ: La validación 'itemExistente' que agrupaba los combos idénticos.
-    //  AHORA: Cada combo configurado va en su propio renglón.
-    carrito.push({ 
-        uid: Date.now() + Math.random(), 
-        id: combo.id, 
-        nombre: combo.nombre, 
-        descripcion: descripcionCombo, 
-        precio: combo.precio, 
-        cantidad: 1, 
-        nota: "" 
-    });
-
-    actualizarInterfazCarrito();
-}
-
-       function cambiarCantidad(uid, cambio) {
+function cambiarCantidad(uid, cambio) {
     const item = carrito.find(i => i.uid === uid);
     if (!item) return;
 
-    // Si cambio es mayor que 0 (botón +), suma 0.5. Si es menor (botón -), resta 0.5.
-    const ajusteDecimal = cambio > 0 ? 0.5 : -0.5;
-    item.cantidad += ajusteDecimal;
+    // RESPALDO AUTOMÁTICO: Si item.medias es undefined, verificamos si es un combo por su ID
+    let permiteMedias = item.medias === true;
+    if (item.medias === undefined || item.medias === null) {
+        permiteMedias = item.id && item.id.toUpperCase().startsWith('C');
+    }
 
+    // Mensaje de diagnóstico para verificar la lectura en vivo de la hoja de cálculo
+    console.log(`Articulo: ${item.nombre} | ID: ${item.id} | Permite Medias en Sheet?: ${permiteMedias}`);
+
+    if (!permiteMedias) {
+        // --- COMPORTAMIENTO EXCLUSIVO PARA COCA-COLA / REFRESCOS / ENTEROS ---
+        if (cambio < 0 && item.cantidad <= 1) {
+            console.log(`-> Eliminando entero: ${item.nombre}`);
+            eliminarDelCarrito(uid);
+            return;
+        }
+        
+        // Si por residuos de ejecuciones previas quedó en decimal, lo regularizamos a enteros
+        if (item.cantidad % 1 !== 0) {
+            item.cantidad = cambio > 0 ? Math.ceil(item.cantidad) : Math.floor(item.cantidad);
+        } else {
+            item.cantidad += (cambio > 0 ? 1 : -1);
+        }
+    } else {
+        // --- COMPORTAMIENTO PARA COMBOS PERMITIDOS EN MEDIAS ÓRDENES ---
+        const paso = 0.5;
+        const ajuste = cambio > 0 ? paso : -paso;
+        item.cantidad += ajuste;
+    }
+
+    if (item.cantidad <= 0) {
+        eliminarDelCarrito(uid);
+    } else {
+        actualizarInterfazCarrito();
+    }
+}
+      function cambiarCantidad(uid, cambio) {
+    const item = carrito.find(i => i.uid === uid);
+    if (!item) return;
+
+    // Leemos la regla de tu Google Sheet
+    const permiteMedias = item.medias === true;
+
+    if (!permiteMedias) {
+        // --- REFRESCOS Y ARTÍCULOS ENTEROS STRICTOR (COCA-COLA) ---
+        if (cambio < 0 && item.cantidad <= 1) {
+            eliminarDelCarrito(uid);
+            return;
+        }
+        item.cantidad += (cambio > 0 ? 1 : -1);
+
+    } else {
+        // --- COMBOS CON PASO INTELIGENTE (1 -> 0.5 Y 1 -> 2 -> 3) ---
+        if (cambio > 0) {
+            // Si el usuario presiona MÁS (+):
+            if (item.cantidad === 0.5) {
+                item.cantidad = 1; // Si estaba en media orden (0.5), sube a 1 entera
+            } else {
+                item.cantidad += 1; // Si ya estaba en 1 o más, sube de 1 en 1 entero (2, 3, 4...)
+            }
+        } else {
+            // Si el usuario presiona MENOS (-):
+            if (item.cantidad === 1) {
+                item.cantidad = 0.5; // Si estaba en 1 entero, baja exclusivamente a media orden (0.5)
+            } else if (item.cantidad === 0.5) {
+                eliminarDelCarrito(uid); // Si ya estaba en 0.5 y resta, se elimina del pedido
+                return;
+            } else {
+                item.cantidad -= 1; // Si estaba en un número grande (ej. 3 o 2), baja de 1 en 1 entero
+            }
+        }
+    }
+
+    // Doble candado para limpiar cualquier residuo o cero
     if (item.cantidad <= 0) {
         eliminarDelCarrito(uid);
     } else {
