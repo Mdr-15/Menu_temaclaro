@@ -842,7 +842,50 @@ async function cargarMenuCompleto() {
     if (selectSalsa) selectSalsa.value = '';
     actualizarInterfazCarrito();
 }
+function agregarComboEstructuraNueva(comboId) {
+    const combo = baseDatosProductos.combos.find(c => c.id === comboId);
+    if (!combo) return;
 
+    let configuracionFinal = [];
+    let validacionCorrecta = true;
+
+    let index = 0;
+    for (const [nombreSeccion, opciones] of Object.entries(combo.secciones)) {
+        const prodSelect = document.getElementById(`combo-${comboId}-prod-${index}`);
+        const salsaSelect = document.getElementById(`combo-${comboId}-salsa-${index}`);
+
+        const nombreArticulo = prodSelect ? prodSelect.value : '';
+        const salsaArticulo = (salsaSelect && !salsaSelect.disabled) ? salsaSelect.value : '';
+
+        if (!nombreArticulo) { validacionCorrecta = false; break; }
+
+        if (salsaSelect && !salsaSelect.disabled && !salsaArticulo) {
+            alert(`Por favor elige la salsa para tu ${nombreSeccion.toLowerCase()}: ${nombreArticulo}`);
+            validacionCorrecta = false;
+            break;
+        }
+
+        configuracionFinal.push(`${nombreArticulo}${salsaArticulo ? ` (🌶️ ${salsaArticulo})` : ''}`);
+        index++;
+    }
+
+    if (!validacionCorrecta) return;
+
+    const descripcionCombo = `[${configuracionFinal.join(' + ')}]`;
+
+    carrito.push({ 
+        uid: Date.now() + Math.random(), 
+        id: combo.id, 
+        nombre: combo.nombre, 
+        descripcion: descripcionCombo, 
+        precio: combo.precio, 
+        medias: combo.medias, // Guardamos la autorización de tu Google Sheet (true o false)
+        cantidad: 1,          // <-- SIEMPRE INICIA EN 1 EXACTO
+        nota: "" 
+    });
+
+    actualizarInterfazCarrito();
+}
 function cambiarCantidad(uid, cambio) {
     const item = carrito.find(i => i.uid === uid);
     if (!item) return;
