@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -530,7 +530,53 @@
   
 </head>
 <body>
+<!-- CARTEL DE CERRADO PROFESIONAL INTEGRADO -->
+<div id="mensaje-cerrado" style="display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; z-index: 99999; text-align: center; padding: 20px; font-family: sans-serif; background-color: #0b0e14; box-sizing: border-box;">
+    
+    <div style="background: linear-gradient(145deg, #141923, #1b2230); border: 2px solid #ff9f00; border-radius: 24px; padding: 50px 30px; max-width: 450px; width: 100%; box-shadow: 0 0 30px rgba(255, 159, 0, 0.2); position: relative; overflow: hidden; box-sizing: border-box;">
+        
+        <!-- Ícono Animado -->
+        <div style="font-size: 75px; margin-bottom: 20px; display: inline-block; animation: floatIcon 3s ease-in-out infinite;">🚀</div>
+        
+        <!-- Tag de Estado -->
+        <div>
+            <span style="background-color: rgba(231, 76, 60, 0.15); color: #ff4757; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; padding: 6px 16px; border-radius: 50px; border: 1px solid rgba(231, 76, 60, 0.3); display: inline-block; margin-bottom: 20px;">
+                Estación Cerrada
+            </span>
+        </div>
+        
+        <!-- TÍTULO DINÁMICO (Aquí se pintará tu columna de Google Sheets) -->
+        <h2 id="texto-alerta" style="color: #ffffff; font-size: 24px; font-weight: 700; margin: 0; line-height: 1.4; letter-spacing: -0.5px;"></h2>
+        
+        <!-- Línea decorativa -->
+        <div style="width: 60px; height: 3px; background: linear-gradient(90deg, #ff9f00, #ff4757); margin: 25px auto; border-radius: 2px;"></div>
+        
+        <!-- Subtexto informativo fijo -->
+        <p style="color: #a0a5b5; font-size: 14px; margin: 0 0 10px 0; line-height: 1.6;">
+            Preparamos los motores para tu próximo pedido. Consulta nuestros horarios oficiales e intenta nuevamente.
+        </p>
+        
+        <div style="margin-top: 30px; color: #ff9f00; font-size: 12px; font-weight: 600; letter-spacing: 1px;">
+            SPACE WINGS 🪐
+        </div>
+    </div>
+</div>
 
+<style>
+@keyframes floatIcon {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+</style>
+
+
+
+
+
+    
+
+    
     <!-- CONTENEDOR PRINCIPAL DE LA TIENDA -->
     <div id="pantalla-tienda">
         <main>
@@ -573,15 +619,83 @@ const idDocumento = "18DrAD8PX7jpvMoW9N8sKTlqXY4SiprjdmDMBKnfi8gQ";
 const endpointApi = "/gviz/tq?tqx=out:csv&sheet=Hoja1";
 
 const urlGoogleSheets = servidorGoogle + idDocumento + endpointApi;
-
+        
+// 🟢 AGREGA ESTA NUEVA LÍNEA JUSTO AQUÍ ABAJO:
+const urlHorarioSheets = servidorGoogle + idDocumento + "/gviz/tq?tqx=out:csv&sheet=Configuracion";
+        
 let baseDatosProductos = { individuales: [], combos: [] };
 let carrito = [];
 
 async function cargarMenuCompleto() {
     try {
-        // Rompemos la caché de Google agregando la hora actual exacta
-        const urlFinal = urlGoogleSheets + "&t=" + new Date().getTime();
+        // ⏰ 1. VALIDACIÓN DEL HORARIO EN VIVO
+        const urlFinalHorario = urlHorarioSheets + "&t=" + new Date().getTime();
+        const respuestaHorario = await fetch(urlFinalHorario, { cache: "no-store" });
+        const textoHorarioCSV = await respuestaHorario.text();
+        
+        const lineasHorario = textoHorarioCSV.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        
+        if (lineasHorario.length > 1) {
+            const columnasHorario = lineasHorario[1].split(',').map(limpiarTextoSheets);
+            
+            const horaApertura = columnasHorario[0];  // Columna A (Ej: "08:00")
+            const horaCierre = columnasHorario[1];    // Columna B (Ej: "09:00")
+            const diasCerradoRaw = columnasHorario[2];// Columna C (Ej: "Lunes,Martes")
+            const mensajeCerrado = columnasHorario[3];// Columna D ("Por el momento...")
+            
+            // 📅 OBTENER EL DÍA DE LA SEMANA ACTUAL EN TEXTO (Ej: "Lunes", "Sábado")
+            const diasSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const diaActualTexto = diasSemana[new Date().getDay()]; 
+            
+            // Verificar si el día de hoy está en la lista de descanso de la hoja
+            let esDiaDeDescanso = false;
+            if (diasCerradoRaw) {
+                // Separamos por comas y limpiamos espacios para comparar correctamente
+                const listaDiasDescanso = diasCerradoRaw.split(',').map(d => d.trim().toLowerCase());
+                if (listaDiasDescanso.includes(diaActualTexto.toLowerCase())) {
+                    esDiaDeDescanso = true;
+                }
+            }
+            
+            // Obtener la hora actual de tu dispositivo en formato HH:MM
+            const ahora = new Date().toTimeString().substring(0, 5); 
+            
+            // Evaluar si el restaurante está abierto según las horas configuradas
+            let estaEnHorario = false;
+            if (horaApertura <= horaCierre) {
+                estaEnHorario = (ahora >= horaApertura && ahora <= horaCierre);
+            } else {
+                estaEnHorario = (ahora >= horaApertura || ahora <= horaCierre);
+            }
+            
+            // El negocio está abierto SÓLO si está en horario activo Y NO es día de descanso
+            const estaAbierto = estaEnHorario && !esDiaDeDescanso;
+            
+            const tiendaHtml = document.getElementById('pantalla-tienda');
+            const cerradoHtml = document.getElementById('mensaje-cerrado');
+            const textoAlerta = document.getElementById('texto-alerta');
+            
+            if (!estaAbierto) {
+                if (tiendaHtml) tiendaHtml.style.display = 'none';
+                if (cerradoHtml) {
+                    cerradoHtml.style.display = 'flex';
+                    // Si es día de descanso colocamos un texto especial, si no, el mensaje de la hoja
+                    if (esDiaDeDescanso) {
+                        textoAlerta.innerText = `Hoy ${diaActualTexto} nos encontramos cerrados por día de descanso.`;
+                    } else {
+                        textoAlerta.innerText = mensajeCerrado || "Por el momento estamos cerrados";
+                    }
+                }
+                console.log("⏰ Negocio cerrado (por horario o día de descanso).");
+                return; 
+            } else {
+                if (tiendaHtml) tiendaHtml.style.display = ''; 
+                if (cerradoHtml) cerradoHtml.style.display = 'none';
+            }
+        }
 
+        // 🍔 2. CARGA ORIGINAL DE TUS PRODUCTOS
+        const urlFinal = urlGoogleSheets + "&t=" + new Date().getTime();
         const respuesta = await fetch(urlFinal, { 
             cache: "no-store",
             headers: {
@@ -598,7 +712,7 @@ async function cargarMenuCompleto() {
         actualizarInterfazCarrito();
         console.log("⚡ Menú en vivo actualizado con éxito.");
     } catch (error) {
-        console.error("Fallo al inicializar base de datos:", error);
+        console.error("Fallo al inicializar base de datos o validar el horario:", error);
     }
 }
 
